@@ -82,6 +82,7 @@
                             <table class="table-auto w-full">
                                 <thead>
                                     <tr>
+                                        <th class="px-4 py-2">{{__('Shop')}}</th>
                                         <th class="px-4 py-2">{{__('Title')}}</th>
                                         <th class="px-4 py-2">{{__('URL')}}</th>
                                         <th>
@@ -93,6 +94,7 @@
                                 <tbody>
                                     @foreach ($categories as $category)
                                     <tr>
+                                        <td class="border px-4 py-2">{{ $category->shop }}</td>
                                         <td class="border px-4 py-2">{{ $category->title }}</td>
                                         <td class="text-blue-400 border px-4 py-2"><a target="_blank"
                                                 href="{{ $category->url }}">{{ $category->url }}</a></td>
@@ -102,7 +104,7 @@
                                                 @csrf
                                                 <input type="hidden" name="url" value="{{ $category->url }}">
                                                 <input type="hidden" name="id" value="{{ $category->id }}">
-                                                <input type="hidden" name="shop" value="petiteamelie">
+                                                <input type="hidden" name="shop" value="{{ $category->shop }}">
                                                 <button type="submit"
                                                     class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                                     {{__('Scrape all articles')}}
