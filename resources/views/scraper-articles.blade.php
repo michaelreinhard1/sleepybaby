@@ -32,7 +32,7 @@
                                     @foreach ($articles as $article)
                                     <tr>
                                         <td class="border px-4 py-2">
-                                            <img class="w-full object-cover" src="{{ $article->image }}" alt="">
+                                            <img class="w-full object-cover" src="images/{{ $article->image }}" alt="">
                                         </td>
                                         <td class="border px-4 py-2">{{ $article->title }}</td>
                                         <td class="border px-4 py-2">{{__('€')}}{{ $article->price }}</td>

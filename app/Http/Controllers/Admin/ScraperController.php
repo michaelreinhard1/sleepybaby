@@ -126,6 +126,8 @@ class ScraperController extends Controller
             }
     }
 
+
+
     private function scrapePetiteAmelieArticles($request)
     {
 
@@ -153,7 +155,7 @@ class ScraperController extends Controller
             if (!$art) {
                 $art = new Article();
                 $art->title = $article->title;
-                $art->image = $article->image;
+                $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
                 
@@ -174,16 +176,22 @@ class ScraperController extends Controller
         $client = new Client();
         $crawler = $client->request('GET', $request->url);
 
-        $articles = $crawler->filter('#amasty-shopby-product-list > div.products.wrapper.grid.products-grid > ol > li')->each(function ($node) {
+        $articles = $this->scrapeBabyPlanetPageData($crawler);
 
-            $art = new stdClass();
-            $art->title = $node->filter('div > div > strong > a')->text();
-            $art->price = $node->filter('div > .product-item-details > .product-item-inner > .price-box span.price')->text();
-            $art->image = $node->filter('div > a > span > span > img')->attr('src');
-            $art->url = $node->filter('div > a')->attr('href');
+        // Loop until $this->getNextBabyPlanetPage($crawler) returns false
+        // while ($this->getNextBabyPlanetPage($crawler)) {
+        //     set_time_limit(0);
+        //     $crawler = $this->getNextBabyPlanetPage($crawler);
+        //     if (!$crawler) break;
+        //     $articles = array_merge($articles, $this->scrapeBabyPlanetPageData($crawler));
+        // }
 
-            return $art;
-        });
+        for ($i = 0; $i <= 50; $i++) {
+            set_time_limit(0);
+            $crawler = $this->getNextBabyPlanetPage($crawler);
+            if (!$crawler) break;
+            $articles = array_merge($articles, $this->scrapeBabyPlanetPageData($crawler));
+        }
 
         if (empty($articles)) {
             return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
@@ -195,10 +203,9 @@ class ScraperController extends Controller
             if (!$art) {
                 $art = new Article();
                 $art->title = $article->title;
-                $art->image = $article->image;
+                $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
-                
                 $cat = Category::where('id', $request->id)->first();
                 $art->category_id = $cat->id;
                 $art->category = $cat->title;
@@ -208,5 +215,42 @@ class ScraperController extends Controller
         }
 
         return redirect()->route('articles')->with('success', 'The categories were successfully scraped');
+    }
+
+    private function scrapeBabyPlanetPageData($crawler) {
+        return $crawler->filter('#amasty-shopby-product-list > div.products.wrapper.grid.products-grid > ol > li')->each(function ($node) {
+
+            $art = new stdClass();
+            $art->title = $node->filter('div > div > strong > a')->text();
+            $art->price = $node->filter('div > .product-item-details > .product-item-inner > .price-box span.price')->text();
+            $art->image = $node->filter('div > a > span > span > img')->attr('src');
+            $art->url = $node->filter('div > a')->attr('href');
+
+            return $art;
+        });
+    }
+
+    private function getNextBabyPlanetPage($crawler) {
+        $link = $crawler->filter('#amasty-shopby-product-list > div.toolbar.toolbar-products > div.pages > ul > li.item.pages-item-next > a')->selectLink('Volgende stap')->link();
+        if (!$link) return false;
+
+        $client = new Client();
+        $crawler = $client->click($link);
+
+        return $crawler;
+    }
+
+    private function saveImage($image) {
+        // Download the image and save it locally with the a random name
+        $image_name = md5(rand());
+        $image_extension = pathinfo($image, PATHINFO_EXTENSION);
+        $image_path = public_path('images/' . $image_name . '.' . $image_extension);
+        $image_url = $image;
+
+        // Save the image locally with the random name
+        $image_data = file_get_contents($image_url);
+        file_put_contents($image_path, $image_data);
+
+        return ($image_name . '.' . $image_extension);
     }
 }
