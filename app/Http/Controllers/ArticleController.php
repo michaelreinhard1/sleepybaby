@@ -13,6 +13,12 @@ class ArticleController extends Controller
         // Get all the articles from the database
         $articles = Article::all();
 
-        return view('scraper-articles', compact('articles'));
+        // Get all the categories from the articles
+        $categories = $articles->pluck('category')->unique();
+
+        // Only pass the category the user has selected
+        $selectedCategory = request()->category;
+
+        return view('scraper-articles', compact('articles', 'categories'));
     }
 }

@@ -15,8 +15,9 @@ class ScraperController extends Controller
     {
 
         $shops = [
-            'petiteamelie' => "Petite Amelie",
+            'hema' => "hema",
             'babyplanet' => "babyplanet",
+            'europoint' => "europoint",
         ];
 
         // Get al the categories from the database
@@ -31,28 +32,31 @@ class ScraperController extends Controller
     public function scrapeCategories(Request $request)
     {
         switch ($request->shop) {
-            case 'petiteamelie':
-                return $this->scrapePetiteAmelieCategories($request->url);
+            case 'hema':
+                return $this->scrapeHemaCategories($request->url);
                 break;
             case 'babyplanet':
                 return $this->scrapeBabyPlanetCategories($request->url);
                 break;
+            case 'europoint':
+                return $this->scrapeEuropointCategories($request->url);
+                break;
         }
     }
 
-    private function scrapePetiteAmelieCategories($url)
+    private function scrapeHemaCategories($url)
     {
         $client = new Client();
         $crawler = $client->request('GET', $url);
 
-        $categories = $crawler->filter('#nav > .nav-4 .sub-wrap > ul > li')->each(function ($node) {
+        $categories = $crawler->filter('body > div.container > div.content.lister-page.js-load-search.clearfix > div.sidebar.sticky-parent > div > ul > li > ul > li')->each(function ($node) {
             $cat = new stdClass();
-            $cat->title = $node->filter('a > figure > figcaption')->text();
+            $cat->title = $node->filter('a')->text();
             $cat->url = $node->filter('a')->attr('href');
             
             return $cat;
         });
-        
+
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
             return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
@@ -66,7 +70,7 @@ class ScraperController extends Controller
                 $cat = new Category();
                 $cat->title = $category->title;
                 $cat->url = $category->url;
-                $cat->shop = 'petiteamelie';
+                $cat->shop = 'hema';
                 $cat->save();
             }
         }
@@ -75,6 +79,8 @@ class ScraperController extends Controller
         return redirect()->route('scraper')->with('success', 'The categories were successfully scraped');
 
     }
+
+
     private function scrapeBabyPlanetCategories($url)
     {
         $client = new Client();
@@ -88,6 +94,7 @@ class ScraperController extends Controller
             
             return $cat;
         });
+
         
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
@@ -107,42 +114,94 @@ class ScraperController extends Controller
             }
         }
 
+        return redirect()->route('scraper')->with('success', 'The categories were successfully scraped');
+    }
+
+    private function scrapeEuropointCategories($url)
+    {
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+        
+
+        $categories = $crawler->filter('#ul_layered_category_0 > li')->each(function ($node) {
+            $cat = new stdClass();
+            $cat->title = $node->filter('a')->text();
+            $cat->url = $node->filter('a')->attr('href');
+
+            return $cat;
+        });
+
+        // If categories is empty, then the url is not correct
+        if (empty($categories)) {
+            return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
+        }
+
+
+        // Save all the categories in the database if they don't exist yet
+        foreach ($categories as $category) {
+            $cat = Category::where('title', $category->title)->first();
+            if (!$cat) {
+                $cat = new Category();
+                $cat->title = $category->title;
+                $cat->url = $category->url;
+                $cat->shop = 'europoint';
+                $cat->save();
+            }
+        }
 
         return redirect()->route('scraper')->with('success', 'The categories were successfully scraped');
-
     }
 
     public function scrapeArticles(Request $request)
     {
 
         switch ($request->shop) {
-            case 'petiteamelie':
-                return $this->scrapePetiteAmelieArticles($request);
+            case 'hema':
+                return $this->scrapeHemaArticles($request);
                 break;
             case 'babyplanet':
                 return $this->scrapeBabyPlanetArticles($request);
-                dd('Not implemented yet');
+                break;
+            case 'europoint':
+                return $this->scrapeEuropointArticles($request);
                 break;
             }
     }
 
 
 
-    private function scrapePetiteAmelieArticles($request)
+    private function scrapeHemaArticles($request)
     {
-
 
         $client = new Client();
         $crawler = $client->request('GET', $request->url);
 
-        $articles = $crawler->filter('#products-list > li')->each(function ($node) {
-            $art = new stdClass();
-            $art->title = $node->filter('.product-shop h2')->text();
-            $art->price = $node->filter('.product-shop .price-box .price')->text();
-            $art->image = $node->filter('figure > img')->attr('src');
-            $art->url = $node->filter('a')->attr('href');
+        $articles=array();
 
-            return $art;
+        $crawler->filter('body > div.container > div.content.lister-page.js-load-search.clearfix > div.main-content > div.search-result-content > div > div')->each(function ($node) use (&$articles) {
+            // Fore each product inside product-row-wrap
+            // Make an empty array to store the data
+            $node->filter('.product-container')->each(function ($node) use (&$articles) {
+
+                $art = new stdClass();
+                $art->title = $node->filter('.product .product-info h3 a')->text();
+                $art->url = $node->filter('.product .product-info h3 a')->attr('href');
+                $art->price = $node->filter('.product .product-price .price')->text();
+                $art->image = $node->filter('.product .product-image a img')->attr('data-src');
+
+                // Check if price.old is inside price
+                if ($node->filter('.product .product-price .price-old')->count() > 0) {
+                    $art->price_old = $node->filter('.product .product-price .price-old')->text();
+                } else {
+                    $art->price_old = null;
+                }
+
+                // Push the data to the array
+                array_push($articles,$art);
+
+            });
+
+
         });
 
         if (empty($articles)) {
@@ -156,19 +215,29 @@ class ScraperController extends Controller
                 $art = new Article();
                 $art->title = $article->title;
                 $art->image = $this->saveImage($article->image);
-                $art->url = $article->url;
+                $art->url = 'https://www.hema.com/' . $article->url;
                 $art->price = $article->price;
+                $art->shop = 'hema';
                 
                 $cat = Category::where('id', $request->id)->first();
                 $art->category_id = $cat->id;
                 $art->category = $cat->title;
                 $art->save();
             }
-            
+            else {
+                unset($articles[array_search($article, $articles)]);
+            }
         }
 
-        return redirect()->route('articles')->with('success', 'The categories were successfully scraped');
+        $count = count($articles);
+
+        if (empty($articles)) {
+            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+        }
+
+        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
     }
+
     private function scrapeBabyPlanetArticles($request)
     {
 
@@ -177,14 +246,6 @@ class ScraperController extends Controller
         $crawler = $client->request('GET', $request->url);
 
         $articles = $this->scrapeBabyPlanetPageData($crawler);
-
-        // Loop until $this->getNextBabyPlanetPage($crawler) returns false
-        // while ($this->getNextBabyPlanetPage($crawler)) {
-        //     set_time_limit(0);
-        //     $crawler = $this->getNextBabyPlanetPage($crawler);
-        //     if (!$crawler) break;
-        //     $articles = array_merge($articles, $this->scrapeBabyPlanetPageData($crawler));
-        // }
 
         for ($i = 0; $i <= 50; $i++) {
             set_time_limit(0);
@@ -206,15 +267,27 @@ class ScraperController extends Controller
                 $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
+                $art->shop = 'babyplanet';
+
                 $cat = Category::where('id', $request->id)->first();
                 $art->category_id = $cat->id;
                 $art->category = $cat->title;
                 $art->save();
             }
-            
+            else {
+                unset($articles[array_search($article, $articles)]);
+            }
         }
 
-        return redirect()->route('articles')->with('success', 'The categories were successfully scraped');
+        // Count the articles
+        $count = count($articles);
+
+        if (empty($articles)) {
+            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+        }
+
+        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+
     }
 
     private function scrapeBabyPlanetPageData($crawler) {
@@ -231,8 +304,9 @@ class ScraperController extends Controller
     }
 
     private function getNextBabyPlanetPage($crawler) {
-        $link = $crawler->filter('#amasty-shopby-product-list > div.toolbar.toolbar-products > div.pages > ul > li.item.pages-item-next > a')->selectLink('Volgende stap')->link();
-        if (!$link) return false;
+        $element = $crawler->filter('#amasty-shopby-product-list > div.toolbar.toolbar-products > div.pages > ul > li.item.pages-item-next > a');
+        if ($element->count() == 0) return false;
+        $link = $element->selectLink('Volgende stap')->link();
 
         $client = new Client();
         $crawler = $client->click($link);
@@ -240,17 +314,80 @@ class ScraperController extends Controller
         return $crawler;
     }
 
-    private function saveImage($image) {
-        // Download the image and save it locally with the a random name
-        $image_name = md5(rand());
-        $image_extension = pathinfo($image, PATHINFO_EXTENSION);
-        $image_path = public_path('images/' . $image_name . '.' . $image_extension);
-        $image_url = $image;
+    private function scrapeEuropointArticles($request)
+    {
 
-        // Save the image locally with the random name
-        $image_data = file_get_contents($image_url);
-        file_put_contents($image_path, $image_data);
 
-        return ($image_name . '.' . $image_extension);
+        $client = new Client();
+        $crawler = $client->request('GET', $request->url);
+
+        $articles = $this->scrapeEuropointPageData($crawler);
+
+        for ($i = 0; $i <= 50; $i++) {
+            set_time_limit(0);
+            dd($articles);
+            $crawler = $this->getNextEuropointPage($crawler);
+            if (!$crawler) break;
+            $articles = array_merge($articles, $this->scrapeEuropointPageData($crawler));
+        }
+
+
+        if (empty($articles)) {
+            return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
+        }
+
+        foreach ($articles as $article) {
+            $art = Article::where('title', $article->title)->first();
+            if (!$art) {
+                $art = new Article();
+                $art->title = $article->title;
+                $art->image = $this->saveImage($article->image);
+                $art->url = $article->url;
+                $art->price = $article->price;
+                $cat = Category::where('id', $request->id)->first();
+                $art->category_id = $cat->id;
+                $art->category = $cat->title;
+                $art->save();
+            }
+            
+        }
+
+        return redirect()->route('articles')->with('success', 'The categories were successfully scraped');
+    }
+
+    private function scrapeEuropointPageData($crawler) {
+        return $crawler->filter('ul.product_list > li')->each(function ($node) {
+
+            $art = new stdClass();
+            $art->title = $node->filter('div > div.right-block > h5 > a')->text();
+            $art->price = $node->filter('div > div.right-block > div.content_price > span')->text();
+            $art->image = $node->filter('div > div.left-block > div > a > img')->attr('data-original');
+            $art->url = $node->filter('div > div.right-block > h5 > a')->attr('href');
+
+            return $art;
+        });
+    }
+
+    private function getNextEuropointPage($crawler) {
+        $element = $crawler->filter('#pagination > ul > li.pagination_next > a');
+        if ($element->count() == 0) return false;
+        $link = $element->selectLink('next')->link();
+
+        $client = new Client();
+        $crawler = $client->click($link);
+
+        return $crawler;
+    }
+
+    private function saveImage($image_url) {
+        // Download the image url in the public images folder and give the image a unique name
+        $image_name = uniqid() . '.jpg';
+        $image_path = public_path('images/' . $image_name);
+
+        // Save the image in the public images folder
+        $image = file_get_contents($image_url);
+        file_put_contents($image_path, $image);
+
+        return $image_name;
     }
 }

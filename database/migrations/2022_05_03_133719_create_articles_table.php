@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('category_id')->nullable();
             $table->string('image');
             $table->string('price');
+            $table->string('shop');
             $table->timestamps();
         });
     }
