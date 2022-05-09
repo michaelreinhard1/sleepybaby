@@ -17,7 +17,7 @@ class ScraperController extends Controller
         $shops = [
             'hema' => "hema",
             'babyplanet' => "babyplanet",
-            'europoint' => "europoint",
+            'kidsdeco' => "kidsdeco",
         ];
 
         // Get al the categories from the database
@@ -38,8 +38,8 @@ class ScraperController extends Controller
             case 'babyplanet':
                 return $this->scrapeBabyPlanetCategories($request->url);
                 break;
-            case 'europoint':
-                return $this->scrapeEuropointCategories($request->url);
+            case 'kidsdeco':
+                return $this->scrapeKidsDecoCategories($request->url);
                 break;
         }
     }
@@ -117,13 +117,13 @@ class ScraperController extends Controller
         return redirect()->route('scraper')->with('success', 'The categories were successfully scraped');
     }
 
-    private function scrapeEuropointCategories($url)
+    private function scrapeKidsDecoCategories($url)
     {
         $client = new Client();
         $crawler = $client->request('GET', $url);
         
 
-        $categories = $crawler->filter('#ul_layered_category_0 > li')->each(function ($node) {
+        $categories = $crawler->filter('#narrow-by-list > div.layered-navigation__filter.filter-options-item.layered-navigation__filter--opened.active > div.layered-navigation__content.filter-options-content > ol > li.item.layered-navigation__item.layered-navigation__item--parent.layered-navigation__item--active > ol > li')->each(function ($node) {
             $cat = new stdClass();
             $cat->title = $node->filter('a')->text();
             $cat->url = $node->filter('a')->attr('href');
@@ -144,7 +144,7 @@ class ScraperController extends Controller
                 $cat = new Category();
                 $cat->title = $category->title;
                 $cat->url = $category->url;
-                $cat->shop = 'europoint';
+                $cat->shop = 'kidsdeco';
                 $cat->save();
             }
         }
@@ -162,8 +162,8 @@ class ScraperController extends Controller
             case 'babyplanet':
                 return $this->scrapeBabyPlanetArticles($request);
                 break;
-            case 'europoint':
-                return $this->scrapeEuropointArticles($request);
+            case 'kidsdeco':
+                return $this->scrapeKidsDecoArticles($request);
                 break;
             }
     }
@@ -314,27 +314,27 @@ class ScraperController extends Controller
         return $crawler;
     }
 
-    private function scrapeEuropointArticles($request)
+    private function scrapeKidsDecoArticles($request)
     {
 
 
         $client = new Client();
         $crawler = $client->request('GET', $request->url);
-
-        $articles = $this->scrapeEuropointPageData($crawler);
+        
+        $articles = $this->scrapeKidsDecoPageData($crawler);
 
         for ($i = 0; $i <= 50; $i++) {
             set_time_limit(0);
-            dd($articles);
-            $crawler = $this->getNextEuropointPage($crawler);
+            $crawler = $this->getNextKidsDecoPage($crawler);
             if (!$crawler) break;
-            $articles = array_merge($articles, $this->scrapeEuropointPageData($crawler));
+            $articles = array_merge($articles, $this->scrapeKidsDecoPageData($crawler));
         }
 
 
         if (empty($articles)) {
             return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
         }
+
 
         foreach ($articles as $article) {
             $art = Article::where('title', $article->title)->first();
@@ -344,6 +344,8 @@ class ScraperController extends Controller
                 $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
+                $art->shop = 'kidsdeco';
+
                 $cat = Category::where('id', $request->id)->first();
                 $art->category_id = $cat->id;
                 $art->category = $cat->title;
@@ -352,26 +354,32 @@ class ScraperController extends Controller
             
         }
 
-        return redirect()->route('articles')->with('success', 'The categories were successfully scraped');
+        $count = count($articles);
+
+        if (empty($articles)) {
+            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+        }
+
+        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
     }
 
-    private function scrapeEuropointPageData($crawler) {
-        return $crawler->filter('ul.product_list > li')->each(function ($node) {
+    private function scrapeKidsDecoPageData($crawler) {
+        return $crawler->filter('.products.products-grid > ol > li.item.product.product-item.product-item-container')->each(function ($node) {
 
             $art = new stdClass();
-            $art->title = $node->filter('div > div.right-block > h5 > a')->text();
-            $art->price = $node->filter('div > div.right-block > div.content_price > span')->text();
-            $art->image = $node->filter('div > div.left-block > div > a > img')->attr('data-original');
-            $art->url = $node->filter('div > div.right-block > h5 > a')->attr('href');
+            $art->title = $node->filter('.product.name.product-item-name a.product-item-link')->text();
+            $art->price = $node->filter('span[data-price-amount]')->attr('data-price-amount');
+            $art->image = $node->filter('picture > source')->attr('srcset');
+            $art->url = $node->filter('a.product-item-link')->attr('href');
 
             return $art;
         });
     }
 
-    private function getNextEuropointPage($crawler) {
-        $element = $crawler->filter('#pagination > ul > li.pagination_next > a');
+    private function getNextKidsDecoPage($crawler) {
+        $element = $crawler->filter('ul.pages-items > li.pages-item-next > a');
         if ($element->count() == 0) return false;
-        $link = $element->selectLink('next')->link();
+        $link = $element->link();
 
         $client = new Client();
         $crawler = $client->click($link);

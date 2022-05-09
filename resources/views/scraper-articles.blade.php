@@ -52,7 +52,7 @@
                 
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
-                            <table class="table-auto">
+                            <table class="table-auto h-px">
                                 <thead>
                                     <tr>
                                         <th class="px-4 py-2">{{__('Image')}}</th>
@@ -63,7 +63,7 @@
                                         <th class="px-4 py-2">{{__('Shop')}}</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="overflow-x-hidden overflow-y-scroll h-px">
                                     @foreach ($articles as $article)
                                     <tr>
                                         <td class="border px-4 py-2">
