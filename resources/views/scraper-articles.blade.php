@@ -27,7 +27,7 @@
                     {{ session('warning') }}
                 </div>
                 @endif
-                
+
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{-- Make a select with options category filter --}}
                     <div class="flex items-center justify-between">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
                             <table class="table-auto h-px">

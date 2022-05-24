@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\InvitationController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [InvitationController::class, 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
