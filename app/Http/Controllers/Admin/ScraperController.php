@@ -53,7 +53,7 @@ class ScraperController extends Controller
             $cat = new stdClass();
             $cat->title = $node->filter('a')->text();
             $cat->url = $node->filter('a')->attr('href');
-            
+
             return $cat;
         });
 
@@ -85,17 +85,17 @@ class ScraperController extends Controller
     {
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        
+
 
         $categories = $crawler->filter('.categories > div.body > ul.list > li')->each(function ($node) {
             $cat = new stdClass();
             $cat->title = $node->filter('a')->text();
             $cat->url = $node->filter('a')->attr('href');
-            
+
             return $cat;
         });
 
-        
+
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
             return redirect()->route('scraper')->with('error', 'The url is not correct, please try again');
@@ -121,7 +121,7 @@ class ScraperController extends Controller
     {
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        
+
 
         $categories = $crawler->filter('#narrow-by-list > div.layered-navigation__filter.filter-options-item.layered-navigation__filter--opened.active > div.layered-navigation__content.filter-options-content > ol > li.item.layered-navigation__item.layered-navigation__item--parent.layered-navigation__item--active > ol > li')->each(function ($node) {
             $cat = new stdClass();
@@ -218,7 +218,7 @@ class ScraperController extends Controller
                 $art->url = 'https://www.hema.com/' . $article->url;
                 $art->price = $article->price;
                 $art->shop = 'hema';
-                
+
                 $cat = Category::where('id', $request->id)->first();
                 $art->category_id = $cat->id;
                 $art->category = $cat->title;
@@ -232,10 +232,10 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
         }
 
-        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
     }
 
     private function scrapeBabyPlanetArticles($request)
@@ -283,10 +283,10 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
         }
 
-        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
 
     }
 
@@ -320,7 +320,7 @@ class ScraperController extends Controller
 
         $client = new Client();
         $crawler = $client->request('GET', $request->url);
-        
+
         $articles = $this->scrapeKidsDecoPageData($crawler);
 
         for ($i = 0; $i <= 50; $i++) {
@@ -351,16 +351,16 @@ class ScraperController extends Controller
                 $art->category = $cat->title;
                 $art->save();
             }
-            
+
         }
 
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
         }
 
-        return redirect()->route('articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
     }
 
     private function scrapeKidsDecoPageData($crawler) {
@@ -397,5 +397,19 @@ class ScraperController extends Controller
         file_put_contents($image_path, $image);
 
         return $image_name;
+    }
+
+    // Show all the articles
+    public function showArticles() {
+        // Get all the articles from the database
+        $articles = Article::all();
+
+        // Get all the categories from the articles
+        $categories = $articles->pluck('category')->unique();
+
+        // Only pass the category the user has selected
+        $selectedCategory = request()->category;
+
+        return view('scraper-articles', compact('articles', 'categories'));
     }
 }

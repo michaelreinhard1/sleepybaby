@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -14,41 +14,41 @@
                 <div class="container mx-auto">
                     <div class="max-w-md mx-auto my-10">
                         <div class="text-center">
-                            <h1 class="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">Sign in</h1>
-                            <p class="text-gray-500 dark:text-gray-400">Sign in to access your account</p>
+                            <h1 class="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">{{__('Sign in')}}</h1>
+                            <p class="text-gray-500 dark:text-gray-400">{{__('Sign in to access your account')}}</p>
                         </div>
                         <div class="m-7">
 
                                 <div class="mb-6">
                                     <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="email" :value="__('Email')" />
-                                    <x-input id="email" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-pink-100 focus:border-pink-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="email" name="email" :value="old('email')" required autofocus />
+                                    <x-input id="email" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="email" name="email" :value="old('email')" required autofocus />
                                 </div>
                                 <div class="mb-6">
                                     <div class="flex justify-between mb-2">
                                         <x-label for="password" class="text-sm text-gray-600 dark:text-gray-400" :value="__('Password')" />
                                         @if (Route::has('password.request'))
-                                        <a class="text-sm text-gray-400 focus:outline-none focus:text-pink-500 hover:text-pink-500 dark:hover:text-pink-300" href="{{ route('password.request') }}">
+                                        <a class="text-sm text-gray-400 focus:outline-none focus:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-300" href="{{ route('password.request') }}">
                                             {{ __('Forgot your password?') }}
                                         </a>
                                         @endif
                                     </div>
-                                    <x-input autocomplete="current-password" required type="password" name="password" id="password" placeholder="Your Password" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-pink-100 focus:border-pink-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" />
+                                    <x-input autocomplete="current-password" required type="password" name="password" id="password" placeholder="Your Password" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" />
                                 </div>
                                 <div class="mb-6">
                                     <label for="remember_me" class="inline-flex items-center">
-                                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-pink-600 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50" name="remember">
+                                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-emerald-600 shadow-sm focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50" name="remember">
                                         <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                                     </label>
                                 </div>
                                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <x-auth-session-status class="mb-4" :status="session('status')" />
                                 <div class="mb-6">
-                                    <button class="w-full px-3 py-4 text-white bg-pink-500 rounded-md focus:bg-pink-600 focus:outline-none">
+                                    <x-button>
                                         {{ __('Log in') }}
-                                    </button>
+                                    </x-button>
                                 </div>
                                 <p class="text-sm text-center text-gray-400">{{__("Don't have an account yet?")}}
-                                    <a href="{{ route('register') }}" class="text-pink-400 focus:outline-none focus:underline focus:text-pink-500 dark:focus:border-pink-800"> {{__('Register')}}</a>.</p>
+                                    <a href="{{ route('register') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>.</p>
                         </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             <!-- Remember Me -->
             <div class="block mt-4">
                 <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-pink-600 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50" name="remember">
+                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-emerald-600 shadow-sm focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50" name="remember">
                     <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                 </label>
             </div>
@@ -93,4 +93,4 @@
 
         </form>
     </x-auth-card>
-</x-guest-layout>
+</x-app-layout>
