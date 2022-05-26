@@ -4,23 +4,15 @@
             {{__('Articles')}}
         </h2>
     </x-slot>
-
-    @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-    @endif
+    <x-slot name="navigation">
+        @guest
+            @include('layouts.navigation-user')
+        @endguest
+    </x-slot>
     <div class="bg-white">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h2 class="sr-only">Articles</h2>
-          <h1 class="text-3xl font-bold mb-10">Articles</h1>
+          <h2 class="sr-only">{{__('Articles')}}</h2>
+          <h1 class="text-3xl font-bold mb-10">{{__('Articles')}}</h1>
 
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 

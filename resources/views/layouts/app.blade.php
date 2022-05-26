@@ -43,6 +43,7 @@
                 </header> --}}
             @endauth
 
+            {{$navigation}}
 
             <!-- Page Content -->
             <main>

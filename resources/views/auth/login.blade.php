@@ -1,4 +1,9 @@
 <x-app-layout>
+
+    <x-slot name="navigation">
+    </x-slot>
+
+
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -6,8 +11,9 @@
             </a>
         </x-slot>
 
-        <!-- Session Status -->
 
+
+        <!-- Session Status -->
 
         <form method="POST" action="{{ route('login') }}" class="flex bg-white dark:bg-gray-900">
             @csrf

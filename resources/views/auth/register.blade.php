@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-slot name="navigation">
+    </x-slot>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">

@@ -1688,6 +1688,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(16 185 129 / var(--tw-text-opacity));
 }
+.focus\:text-gray-900:focus {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
 .focus\:underline:focus {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;

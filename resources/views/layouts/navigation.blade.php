@@ -12,6 +12,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('articles')" :active="request()->routeIs('articles')">
+                        {{ __('Articles') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')">
+                        {{ __('Cart') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
 
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('admin')">
                         {{ __('Dashboard') }}
@@ -24,7 +35,7 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('scraped.articles')" :active="request()->routeIs('scraped.articles')">
-                        {{ __('Articles') }}
+                        {{ __('Scraped rticles') }}
                     </x-nav-link>
                 </div>
             </div>

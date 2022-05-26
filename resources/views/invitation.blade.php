@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-slot name="navigation">
+    </x-slot>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -47,7 +49,7 @@
                     @endauth
                 </div> --}}
     @endif
-    <form method="POST" action="{{ route('login') }}" class="flex bg-white dark:bg-gray-900">
+    <form method="POST" action="{{ route('invitation.enter') }}" class="flex bg-white dark:bg-gray-900">
         @csrf
             <div class="container mx-auto">
                 <div class="max-w-md mx-auto my-10">
@@ -68,7 +70,6 @@
                                 </x-button>
                             </div>
                             {{-- Do you want to create your own wishlist? Login or register here --}}
-                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <p class="text-sm text-center text-gray-400">{{__("Do you want to create your own wishlist?")}}
                                     <br>
                                     <a href="{{ route('register') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>

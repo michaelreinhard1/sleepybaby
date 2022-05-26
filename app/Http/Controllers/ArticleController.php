@@ -49,7 +49,7 @@ class ArticleController extends Controller
 
 
         // Redirect to articles page with success message
-        return redirect()->route('articles')->with('success', 'Article added to cart');
+        return redirect()->back()->with('success', 'Article added to cart');
 
     }
 
@@ -64,9 +64,9 @@ class ArticleController extends Controller
 
     public function remove(Request $request)
     {
-        $article = Article::find($request->id);
+        // $article = Article::find($request->id);
 
-        Cart::session(1)->remove($article->id);
+        Cart::session(1)->remove($request->id);
 
         return redirect()->back()->with('success', 'Article removed from cart');
     }

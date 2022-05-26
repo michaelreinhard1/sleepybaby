@@ -4,29 +4,21 @@
             {{__('Articles')}}
         </h2>
     </x-slot>
-
-    @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-    @endif
+    <x-slot name="navigation">
+        @guest
+            @include('layouts.navigation-user')
+        @endguest
+    </x-slot>
     <div class="bg-white h-screen">
     <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="text-3xl font-bold mb-10">Shopping cart</h1>
+        <h1 class="text-3xl font-bold mb-10">{{__('Shopping cart')}}</h1>
         <hr>
 
         {{-- If CartItems is empty --}}
         @if (Cart::isEmpty())
             <div class="text-center">
-                <h2 class="text-xl text-gray-800">Your cart is empty</h2>
-                <a href="{{ route('articles') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Go to articles</a>
+                <h2 class="text-xl text-gray-800">{{__('Your cart is empty')}}</h2>
+                <a href="{{ route('articles') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{__('Go to articles')}}</a>
             </div>
         @else
     <div class="flex flex-col">
@@ -78,11 +70,12 @@
 
         <div class="flex justify-between">
             <div>
-                <p>Total: € {{Cart::getTotal()}}</p>
+                <p>{{__('Total')}}: € {{Cart::getTotal()}}</p>
             </div>
             <div>
-                <form action="{{ route('checkout') }}" method="POST">
-                    @csrf
+                <form method="get" action="{{route('checkout')}}">
+                    <input required name="name" type="text" placeholder="{{__('Name')}}">
+                    <input required name="remarks" type="text" placeholder="{{__('Remarks')}}">
                     <button type="submit" class="text-green-500 rounded-lg">
                         {{ __('Checkout') }}
                     </button>
