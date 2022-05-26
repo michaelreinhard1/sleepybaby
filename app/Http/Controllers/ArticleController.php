@@ -14,7 +14,6 @@ class ArticleController extends Controller
     public function show()
     {
 
-
         // Get code from local storage
         $code = session()->get('code');
 

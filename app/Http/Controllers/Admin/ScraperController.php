@@ -178,7 +178,7 @@ class ScraperController extends Controller
 
         $articles=array();
 
-        $crawler->filter('body > div.container > div.content.lister-page.js-load-search.clearfix > div.main-content > div.search-result-content > div > div')->each(function ($node) use (&$articles) {
+        $crawler->filter('div.container > div.content.lister-page.js-load-search.clearfix > div.main-content > div.search-result-content > div > div')->each(function ($node) use (&$articles) {
             // Fore each product inside product-row-wrap
             // Make an empty array to store the data
             $node->filter('.product-container')->each(function ($node) use (&$articles) {
@@ -187,7 +187,10 @@ class ScraperController extends Controller
                 $art->title = $node->filter('.product .product-info h3 a')->text();
                 $art->url = $node->filter('.product .product-info h3 a')->attr('href');
                 $art->price = $node->filter('.product .product-price .price')->text();
-                $art->image = $node->filter('.product .product-image a img')->attr('data-src');
+                $art->price = $this->formatPrice($art->price);
+                $art->image = $node->filter('.product .product-image a img')->attr('data-thumb');
+                // Get src inside json data-thumb
+                $art->image = json_decode($art->image)->src;
 
                 // Check if price.old is inside price
                 if ($node->filter('.product .product-price .price-old')->count() > 0) {
@@ -217,6 +220,7 @@ class ScraperController extends Controller
                 $art->image = $this->saveImage($article->image);
                 $art->url = 'https://www.hema.com/' . $article->url;
                 $art->price = $article->price;
+                $art->price = $this->formatPrice($art->price);
                 $art->shop = 'hema';
 
                 $cat = Category::where('id', $request->id)->first();
@@ -267,6 +271,8 @@ class ScraperController extends Controller
                 $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
+                $art->price = $this->formatPrice($art->price);
+
                 $art->shop = 'babyplanet';
 
                 $cat = Category::where('id', $request->id)->first();
@@ -278,6 +284,7 @@ class ScraperController extends Controller
                 unset($articles[array_search($article, $articles)]);
             }
         }
+
 
         // Count the articles
         $count = count($articles);
@@ -296,6 +303,8 @@ class ScraperController extends Controller
             $art = new stdClass();
             $art->title = $node->filter('div > div > strong > a')->text();
             $art->price = $node->filter('div > .product-item-details > .product-item-inner > .price-box span.price')->text();
+            $art->price = $this->formatPrice($art->price);
+
             $art->image = $node->filter('div > a > span > span > img')->attr('src');
             $art->url = $node->filter('div > a')->attr('href');
 
@@ -344,6 +353,8 @@ class ScraperController extends Controller
                 $art->image = $this->saveImage($article->image);
                 $art->url = $article->url;
                 $art->price = $article->price;
+                $art->price = $this->formatPrice($art->price);
+
                 $art->shop = 'kidsdeco';
 
                 $cat = Category::where('id', $request->id)->first();
@@ -369,6 +380,8 @@ class ScraperController extends Controller
             $art = new stdClass();
             $art->title = $node->filter('.product.name.product-item-name a.product-item-link')->text();
             $art->price = $node->filter('span[data-price-amount]')->attr('data-price-amount');
+            $art->price = $this->formatPrice($art->price);
+
             $art->image = $node->filter('picture > source')->attr('srcset');
             $art->url = $node->filter('a.product-item-link')->attr('href');
 
@@ -397,6 +410,13 @@ class ScraperController extends Controller
         file_put_contents($image_path, $image);
 
         return $image_name;
+    }
+
+    private function formatPrice($price) {
+        $price = str_replace('€', '', $price);
+        $price = str_replace('.', '.', $price);
+        $price = str_replace(',', '.', $price);
+        return $price;
     }
 
     // Show all the articles

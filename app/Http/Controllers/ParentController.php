@@ -171,28 +171,4 @@ class ParentController extends Controller
 
         return redirect()->back()->with('success', __('Link copied to clipboard'));
     }
-
-    // export to csv
-    public function exportToCsv($id)
-    {
-        // Find the wishlist with the id
-        $wishlist = Wishlist::find($id);
-
-        // get code
-        $code = $wishlist->code;
-
-        // if env is local
-        if (env('APP_ENV') == 'local') {
-            // return url
-            $share_link = 'http://localhost:8000' . '/share/' . $code;
-        } else {
-            // return url
-            $share_link = env('APP_URL') . '/share/' . $code;
-        }
-
-        // copy to clipboard
-        $this->copyToClipboard($share_link);
-
-        return redirect()->back()->with('success', __('Link copied to clipboard'));
-    }
 }
