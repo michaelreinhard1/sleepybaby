@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
-    // checkout
     public function checkout( Request $request )
     {
 
         if(env('APP_ENV') == 'local') {
             $webhookUrl = env('MOLLIE_WEBHOOK_URL');
         } else {
-            $webhookUrl = route('webhooks.mollie');
+            $webhookUrl = route('user.webhooks.mollie');
         }
 
         $cart = Cart::session(1);
@@ -44,7 +43,7 @@ class CheckoutController extends Controller
             ],
             "description" => // Order on current date and time
                 "Order #{$cart->getContent()->first()->id} on " . date("Y-m-d H:i:s"),
-            "redirectUrl" => route('order.success'),
+            "redirectUrl" => route('user.order.success'),
             "webhookUrl" => $webhookUrl,
             "metadata" => [
                 "order_id" => $order->id, // Pass the order id to webhookUrl
@@ -52,7 +51,7 @@ class CheckoutController extends Controller
             ],
         ]);
 
-        // redirect customer to Mollie checkout page
+        // redirect customer to Mollie user.checkout page
         return redirect($payment->getCheckoutUrl(), 303);
 
     }

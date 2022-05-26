@@ -5,32 +5,44 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('articles') }}">
+                    <a href="{{ route('user.articles') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('articles')" :active="request()->routeIs('articles')">
+                    <x-nav-link :href="route('user.articles')" :active="request()->routeIs('user.articles')">
                         {{ __('Articles') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')">
+                    <x-nav-link :href="route('user.cart.show')" :active="request()->routeIs('user.cart.show')">
                         {{ __('Cart') }}
                     </x-nav-link>
                 </div>
+
+                @if (Auth::check() && Auth::user()->isAdmin)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin.scraper')" :active="request()->routeIs('admin.scraper')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                @endif
+
+
+
             </div>
 
             @if (Route::has('login'))
             <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+
                 @auth
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{__('Log in')}}</a>
 
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">{{__('Register')}}</a>
                     @endif
                 @endauth
             </div>
@@ -86,16 +98,23 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('admin.scraper')" :active="request()->routeIs('admin.scraper')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+        </div>
 
         <!-- Responsive Settings Options -->
         @if (Route::has('login'))
         @auth
 
         <div class="pt-4 pb-1 border-t border-gray-200">
+            @if (Auth::check() && Auth::user()->isAdmin)
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
+            @endif
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->

@@ -17,7 +17,8 @@ class InvitationController extends Controller
         $code = $request->input('code');
 
 
-        return redirect()->route('articles');
+        return redirect()->route('user.articles');
+
         // $code = $request->input('code');
 
         // $article = Article::where('code', $code)->first();

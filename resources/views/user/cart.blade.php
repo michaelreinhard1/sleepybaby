@@ -1,13 +1,8 @@
-<x-app-layout>
+<x-user-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{__('Articles')}}
         </h2>
-    </x-slot>
-    <x-slot name="navigation">
-        @guest
-            @include('layouts.navigation-user')
-        @endguest
     </x-slot>
     <div class="bg-white h-screen">
     <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -18,7 +13,7 @@
         @if (Cart::isEmpty())
             <div class="text-center">
                 <h2 class="text-xl text-gray-800">{{__('Your cart is empty')}}</h2>
-                <a href="{{ route('articles') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{__('Go to articles')}}</a>
+                <a href="{{ route('user.articles') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{__('Go to articles')}}</a>
             </div>
         @else
     <div class="flex flex-col">
@@ -35,7 +30,7 @@
             <div class="flex flex-col">
                 <div class="flex">
 
-                    <form action="{{ route('cart.remove.item', $item->id) }}" method="POST">
+                    <form action="{{ route('user.cart.remove.item', $item->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="font-semibold border bg-gray-100 rounded px-3">
                             -
@@ -45,7 +40,7 @@
                         {{$item->quantity}}
                     </p>
 
-                    <form action="{{ route('cart.add.item', $item->id) }}" method="POST">
+                    <form action="{{ route('user.cart.add.item', $item->id) }}" method="POST">
                         @csrf
                         <input type="hidden" name="quantity" value="{{$item->quantity}}">
                         <button type="submit" class="font-semibold bg-gray-100 rounded px-3">
@@ -53,7 +48,7 @@
                         </button>
                     </form>
                 </div>
-                <form action="{{ route('cart.remove') }}" method="POST">
+                <form action="{{ route('user.cart.remove') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $item->id }}">
                     <button type="submit" class="text-red-500 rounded-lg">
@@ -73,7 +68,7 @@
                 <p>{{__('Total')}}: € {{Cart::getTotal()}}</p>
             </div>
             <div>
-                <form method="get" action="{{route('checkout')}}">
+                <form method="get" action="{{route('user.checkout')}}">
                     <input required name="name" type="text" placeholder="{{__('Name')}}">
                     <input required name="remarks" type="text" placeholder="{{__('Remarks')}}">
                     <button type="submit" class="text-green-500 rounded-lg">
@@ -95,4 +90,4 @@
     </div>
 
 
-    </x-app-layout>
+</x-user-layout>

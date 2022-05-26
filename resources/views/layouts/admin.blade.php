@@ -18,7 +18,12 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            <main>
+
+            @include('layouts.admin-navigation')
+
+
+            <!-- Page Content -->
+            <main class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
                 {{ $slot }}
             </main>
         </div>

@@ -1,13 +1,8 @@
-<x-app-layout>
+<x-user-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{__('Articles')}}
         </h2>
-    </x-slot>
-    <x-slot name="navigation">
-        @guest
-            @include('layouts.navigation-user')
-        @endguest
     </x-slot>
     <div class="bg-white">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -26,7 +21,7 @@
                     <h3 class="mt-4 text-sm text-gray-700">{{$article->title}}</h3>
                     <p class="mt-1 text-lg font-medium text-gray-900">€ {{$article->price}}</p>
                     {{-- Add to shopping cart --}}
-                    <form action="{{ route('cart.store') }}" method="POST">
+                    <form action="{{ route('user.cart.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{ $article->id }}">
                         <button type="submit" class="flex items-center mt-4 text-sm text-white bg-gray-800 rounded-lg px-4 py-2">
@@ -52,4 +47,4 @@
       </div>
 
 
-    </x-app-layout>
+    </x-user-layout>

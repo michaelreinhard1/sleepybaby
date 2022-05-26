@@ -20,7 +20,7 @@ class ArticleController extends Controller
         // Only pass the category the user has selected
         $selectedCategory = request()->category;
 
-        return view('articles', compact('articles', 'categories'));
+        return view('user.articles', compact('articles', 'categories'));
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class ArticleController extends Controller
 
         $cartItems = $cart->getContent();
 
-        return view('cart', compact('cartItems'));
+        return view('user.cart', compact('cartItems'));
     }
 
     public function remove(Request $request)

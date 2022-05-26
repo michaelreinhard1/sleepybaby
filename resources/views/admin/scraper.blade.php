@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{__('Scraper')}}
@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('scraper.categories') }}">
+                    <form method="POST" action="{{ route('admin.scraper.categories') }}">
                         @csrf
                         <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full px-3">
@@ -102,7 +102,7 @@
                                                 href="{{ $category->url }}">{{ $category->url }}</a></td>
                                         <td class="border px-4 py-2">
                                             {{-- Make a form to scrape all the articles from the category --}}
-                                            <form method="POST" action="{{ route('scraper.articles') }}">
+                                            <form method="POST" action="{{ route('admin.scraper.articles') }}">
                                                 @csrf
                                                 <input type="hidden" name="url" value="{{ $category->url }}">
                                                 <input type="hidden" name="id" value="{{ $category->id }}">
@@ -125,4 +125,4 @@
         </div>
     </div>
 
-</x-app-layout>
+</x-admin-layout>

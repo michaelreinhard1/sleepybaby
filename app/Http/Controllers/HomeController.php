@@ -13,7 +13,7 @@ class HomeController extends Controller
         $articles = Article::all();
 
 
-        return view('articles', compact('articles'));
+        return view('user.articles', compact('articles'));
     }
 
 }
