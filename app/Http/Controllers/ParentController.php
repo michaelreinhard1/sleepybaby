@@ -14,7 +14,7 @@ class ParentController extends Controller
         // Get all articles from the database and pass them to the view
         $articles = Article::paginate(24);
 
-        return view('parent.home', ['articles' => $articles]);
+        return view('parent.wishlist.show', ['articles' => $articles]);
     }
     // showWishlist
     public function showWishlists()
@@ -23,7 +23,11 @@ class ParentController extends Controller
         // show wishlist of the user
         $wishlists = Wishlist::where('user_id', auth()->user()->id)->get();
 
-        return view('parent.wishlist', compact('wishlists'));
+        foreach ($wishlists as $wishlist) {
+            $wishlist->share = $this->generateShareUrl($wishlist->id);
+        }
+
+        return view('parent.wishlists', compact('wishlists'));
     }
 
     // create wishlist
@@ -54,6 +58,9 @@ class ParentController extends Controller
 
     public function destroyWishlist($id)
     {
+
+        // Prompt the user to confirm deletion
+
         // Find the wishlist with the id
         $wishlist = Wishlist::find($id);
 
@@ -68,6 +75,7 @@ class ParentController extends Controller
 
         // Find the wishlist with the id
         $wishlist = Wishlist::find($id);
+
 
         // Get all articles with id in wishlist->article_id
         $articles = Article::whereIn('id', json_decode($wishlist->article_id))->get();
@@ -117,5 +125,50 @@ class ParentController extends Controller
         $wishlist->save();
 
         return redirect()->back()->with('success', 'Article added to wishlist successfully.');
+    }
+
+    // share
+    private function generateShareUrl($id)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($id);
+
+        // get code
+        $code = $wishlist->code;
+
+        // if env is local
+        if (env('APP_ENV') == 'local') {
+            // return url
+            $share_link = 'http://localhost:8000' . '/share/' . $code;
+        } else {
+            // return url
+            $share_link = env('APP_URL') . '/share/' . $code;
+        }
+
+        return $share_link;
+    }
+
+    // copyToClipboard
+    public function copyToClipboard($id)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($id);
+
+        // get code
+        $code = $wishlist->code;
+
+        // if env is local
+        if (env('APP_ENV') == 'local') {
+            // return url
+            $share_link = 'http://localhost:8000' . '/share/' . $code;
+        } else {
+            // return url
+            $share_link = env('APP_URL') . '/share/' . $code;
+        }
+
+        // copy to clipboard
+        $this->copyToClipboard($share_link);
+
+        return redirect()->back()->with('success', 'Link copied to clipboard.');
     }
 }

@@ -12,6 +12,8 @@ Route::get('/', [InvitationController::class, 'show'])->name('invitation.show');
 
 Route::post('/invitation', [InvitationController::class, 'enter'])->name('invitation.enter');
 
+Route::get('/share/{code}', [InvitationController::class, 'enterWithCode'])->name('invitation.share');
+
 // User
 Route::group([
     'prefix' => 'user',
@@ -36,7 +38,6 @@ Route::group([
     'namespace' => 'Parent',
     'middleware' => ['auth']
 ], function () {
-    Route::get('/home', [ParentController::class, 'show'])->name('home');
     Route::get('/wishlists', [ParentController::class, 'showWishlists'])->name('wishlists.show');
     Route::get('/wishlist/create', [ParentController::class, 'createWishlist'])->name('wishlist.create');
     Route::post('/wishlist/create', [ParentController::class, 'storeWishlist'])->name('wishlist.store');
@@ -48,6 +49,7 @@ Route::group([
     Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.add.item');
     Route::post('/wishlist/remove/{id}', [ParentController::class, 'removeItem'])->name('wishlist.remove.item');
 
+    Route::get('/wishlist/{id}/share', [ParentController::class, 'copyToClipboard'])->name('wishlist.share');
 });
 
 // Admin

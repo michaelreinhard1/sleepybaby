@@ -58,6 +58,7 @@ class CheckoutController extends Controller
 
     public function success()
     {
-        return view('order-success');
+        Cart::session(1)->clear();
+        return view('user.order-success');
     }
 }

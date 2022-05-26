@@ -22,12 +22,6 @@
                     </x-nav-link>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('user.articles')" :active="request()->routeIs('user.articles')">
-                        {{ __('View site') }}
-                    </x-nav-link>
-                </div>
-
             </div>
 
             <!-- Settings Dropdown -->
@@ -82,11 +76,6 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('admin.scraped.articles')" :active="request()->routeIs('admin.scraped.articles')">
                 {{ __('Scraped  articles') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('user.articles')" :active="request()->routeIs('user.articles')">
-                {{ __('View site') }}
             </x-responsive-nav-link>
         </div>
 
