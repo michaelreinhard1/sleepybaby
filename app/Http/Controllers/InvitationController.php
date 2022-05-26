@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvitationController extends Controller
 {
     public function show()
     {
+
+        if (Auth::check()) {
+            return redirect()->route('user.articles');
+        }
         return view('invitation');
     }
 
     public function enter(Request $request)
     {
         $code = $request->input('code');
+
+
 
 
         return redirect()->route('user.articles');

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\User;
 
@@ -17,7 +18,6 @@ Route::group([
     'prefix' => 'user',
     'as' => 'user.',
     'namespace' => 'User'
-    // 'middleware' => ['auth']
 ], function () {
     Route::get('/home', [ArticleController::class, 'show'])->name('articles');
     Route::get('/cart', [ArticleController::class, 'showCart'])->name('cart.show');
@@ -30,6 +30,24 @@ Route::group([
     Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('webhooks.mollie');
 
 });
+
+// Parent
+Route::group([
+    'prefix' => 'parent',
+    'as' => 'parent.',
+    'namespace' => 'Parent',
+    'middleware' => ['auth']
+], function () {
+    Route::get('/home', [ParentController::class, 'show'])->name('home');
+    Route::get('/wishlist', [ParentController::class, 'showWishlist'])->name('wishlist.show');
+    Route::get('/wishlist/create', [ParentController::class, 'createWishlist'])->name('wishlist.create');
+    Route::post('/wishlist/create', [ParentController::class, 'storeWishlist'])->name('wishlist.store');
+    Route::post('/wishlist/destroy/{id}', [ParentController::class, 'destroyWishlist'])->name('wishlist.destroy');
+    Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.edit');
+
+});
+
+// Admin
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
