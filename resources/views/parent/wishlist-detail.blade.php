@@ -5,14 +5,12 @@
           <h1 class="text-3xl font-bold mb-10">
                 {{ __('Wishlist') }} - {{ $wishlist->name }}
           </h1>
-            {{-- Your wishlists --}}
             <div class="flex flex-col  mb-10">
-                <x-link href="{{ route('parent.widhlist.add.articles', $wishlist) }}">
+                <x-link href="{{ route('parent.wishlist.add.articles', $wishlist) }}">
                     {{ __('Add articles') }}
                 </x-link>
             </div>
 
-            {{-- If $wishlist->article_id array is empty --}}
             @if (empty(json_decode($wishlist->article_id)))
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">

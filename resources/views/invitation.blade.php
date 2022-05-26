@@ -81,7 +81,7 @@
                             <p class="text-sm text-center text-gray-400">{{__("Do you want to create your own wishlist?")}}
                                 <br>
                                 <a href="{{ route('register') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>
-                                or
+                                {{__('or')}}
                                 <a href="{{ route('login') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Login')}}</a>
                             </p>
                 </div>

@@ -59,7 +59,7 @@ class ScraperController extends Controller
 
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
 
@@ -76,7 +76,7 @@ class ScraperController extends Controller
         }
 
 
-        return redirect()->route('admin.scraper')->with('success', 'The categories were successfully scraped');
+        return redirect()->route('admin.scraper')->with('success', __('The categories were successfully scraped'));
 
     }
 
@@ -98,7 +98,7 @@ class ScraperController extends Controller
 
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
 
@@ -114,7 +114,7 @@ class ScraperController extends Controller
             }
         }
 
-        return redirect()->route('admin.scraper')->with('success', 'The categories were successfully scraped');
+        return redirect()->route('admin.scraper')->with('success', __('The categories were successfully scraped'));
     }
 
     private function scrapeKidsDecoCategories($url)
@@ -133,7 +133,7 @@ class ScraperController extends Controller
 
         // If categories is empty, then the url is not correct
         if (empty($categories)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
 
@@ -149,7 +149,7 @@ class ScraperController extends Controller
             }
         }
 
-        return redirect()->route('admin.scraper')->with('success', 'The categories were successfully scraped');
+        return redirect()->route('admin.scraper')->with('success', __('The categories were successfully scraped'));
     }
 
     public function scrapeArticles(Request $request)
@@ -205,7 +205,7 @@ class ScraperController extends Controller
         });
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
         // Save all the articles in the database if they don't exist yet and add the category id
@@ -232,10 +232,10 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped'). $count . __('articles added to the databsase'));
     }
 
     private function scrapeBabyPlanetArticles($request)
@@ -255,7 +255,7 @@ class ScraperController extends Controller
         }
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
         // Save all the articles in the database if they don't exist yet and add the category id
@@ -283,10 +283,10 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped.' ). $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped.') . $count . __('articles added to the databsase'));
 
     }
 
@@ -332,7 +332,7 @@ class ScraperController extends Controller
 
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraper')->with('error', 'The url is not correct, please try again');
+            return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
 
 
@@ -357,10 +357,10 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', 'The articles were already scraped. ' . $count . ' articles were added to the databsase.');
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', 'The articles were successfully scraped. There were ' . $count . ' articles added to the databsase.');
+        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped' ). $count . __('articles added to the databsase'));
     }
 
     private function scrapeKidsDecoPageData($crawler) {
@@ -402,7 +402,7 @@ class ScraperController extends Controller
     // Show all the articles
     public function showArticles() {
         // Get all the articles from the database
-        $articles = Article::all();
+        $articles = Article::paginate(10);
 
         // Get all the categories from the articles
         $categories = $articles->pluck('category')->unique();

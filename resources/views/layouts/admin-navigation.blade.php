@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('user.articles') }}">
+                    <a href="{{ route('admin.scraper') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('admin.scraped.articles')" :active="request()->routeIs('admin.scraped.articles')">
-                        {{ __('Scraped rticles') }}
+                        {{ __('Scraped articles') }}
                     </x-nav-link>
                 </div>
 

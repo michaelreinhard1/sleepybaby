@@ -4,11 +4,10 @@
           <div class="flex justify-between">
 
               <h1 class="text-3xl font-bold mb-10">
-                    {{ __('Your wishlists') }}
+                    {{ __('My wishlists') }}
               </h1>
 
 
-                {{-- Your wishlists --}}
                 <div class="flex flex-col  mb-10">
                     <x-link href="{{ route('parent.wishlist.create') }}">
                         {{ __('Create') }}
@@ -17,9 +16,7 @@
                 </div>
           </div>
 
-            {{-- display all the wishlists --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                {{-- Display "no wishlists" if there are no wishlists --}}
                 @if ($wishlists->isEmpty())
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{__('No wishlists found')}}
@@ -61,6 +58,14 @@
                                                 class="text-blue-500 hover:text-blue-700">
                                                 {{ __('View') }}
                                             </a>
+                                            <form action="{{ route('parent.wishlist.export', $wishlist) }}"
+                                                method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="text-green-500 hover:text-green-700 ml-4">
+                                                    {{ __('Export to') }}
+                                                </button>
+                                            </form>
                                             <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
                                                 method="POST" class="inline">
                                                 @csrf

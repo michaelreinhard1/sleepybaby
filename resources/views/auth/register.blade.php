@@ -89,7 +89,7 @@
                                 </div>
                                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <p class="text-sm text-center text-gray-400">{{__("Already registered?")}}
-                                    <a href="{{ route('login') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Log in')}}</a>.</p>
+                                    <a href="{{ route('login') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Log in')}}</a></p>
 
                         </div>
                 </div>

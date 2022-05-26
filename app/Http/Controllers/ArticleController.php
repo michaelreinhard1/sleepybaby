@@ -57,10 +57,8 @@ class ArticleController extends Controller
             ));
         }
 
-
-
         // Redirect to articles page with success message
-        return redirect()->back()->with('success', 'Article added to cart');
+        return redirect()->back()->with('success', __('Article added to cart'));
 
     }
 
@@ -79,7 +77,7 @@ class ArticleController extends Controller
 
         Cart::session(1)->remove($request->id);
 
-        return redirect()->back()->with('success', 'Article removed from cart');
+        return redirect()->back()->with('success', __('Article removed from cart'));
     }
 
     // Add quantity to an item in the cart
@@ -91,7 +89,7 @@ class ArticleController extends Controller
             'quantity' => +1,
         ]);
 
-        return redirect()->back()->with('success', 'Article quantity updated');
+        return redirect()->back()->with('success', __('Article quantity updated'));
     }
 
     // Remove quantity from an item in the cart
@@ -108,6 +106,6 @@ class ArticleController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Article quantity updated');
+        return redirect()->back()->with('success', __('Article quantity updated'));
     }
 }

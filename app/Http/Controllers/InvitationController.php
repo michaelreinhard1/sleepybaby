@@ -30,7 +30,7 @@ class InvitationController extends Controller
             return redirect()->route('user.articles', $code);
         }
         else {
-            return redirect()->route('invitation.show')->with('error', 'This code is invalid.');
+            return redirect()->route('invitation.show')->with('error', __('This code is invalid'));
         }
 
     }
@@ -44,7 +44,7 @@ class InvitationController extends Controller
             return redirect()->route('user.articles', $code);
         }
         else {
-            return redirect()->route('invitation.show')->with('error', 'This code is invalid.');
+            return redirect()->route('invitation.show')->with('error', __('This code is invalid'));
         }
     }
 }

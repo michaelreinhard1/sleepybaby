@@ -54,7 +54,7 @@
                                     </x-button>
                                 </div>
                                 <p class="text-sm text-center text-gray-400">{{__("Don't have an account yet?")}}
-                                    <a href="{{ route('register') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>.</p>
+                                    <a href="{{ route('register') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a></p>
                         </div>
                 </div>
             </div>

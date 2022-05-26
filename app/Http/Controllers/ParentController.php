@@ -53,7 +53,7 @@ class ParentController extends Controller
 
         $wishlist->save();
 
-        return redirect()->route('parent.wishlists.show')->with('success', 'Wishlist created successfully.');
+        return redirect()->route('parent.wishlists.show')->with('success', __('Wishlist created successfully'));
     }
 
     public function destroyWishlist($id)
@@ -67,7 +67,7 @@ class ParentController extends Controller
         // Delete the wishlist
         $wishlist->delete();
 
-        return redirect()->route('parent.wishlists.show')->with('success', 'Wishlist deleted successfully.');
+        return redirect()->route('parent.wishlists.show')->with('success', __('Wishlist deleted successfully'));
     }
 
     public function showWishlist($id)
@@ -107,7 +107,7 @@ class ParentController extends Controller
 
         $wishlist->save();
 
-        return redirect()->route('parent.wishlists.show')->with('success', 'Article added to wishlist successfully.');
+        return redirect()->route('parent.wishlists.show')->with('success', __('Article added to wishlist successfully'));
     }
 
     // addItem
@@ -169,6 +169,30 @@ class ParentController extends Controller
         // copy to clipboard
         $this->copyToClipboard($share_link);
 
-        return redirect()->back()->with('success', 'Link copied to clipboard.');
+        return redirect()->back()->with('success', __('Link copied to clipboard'));
+    }
+
+    // export to csv
+    public function exportToCsv($id)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($id);
+
+        // get code
+        $code = $wishlist->code;
+
+        // if env is local
+        if (env('APP_ENV') == 'local') {
+            // return url
+            $share_link = 'http://localhost:8000' . '/share/' . $code;
+        } else {
+            // return url
+            $share_link = env('APP_URL') . '/share/' . $code;
+        }
+
+        // copy to clipboard
+        $this->copyToClipboard($share_link);
+
+        return redirect()->back()->with('success', __('Link copied to clipboard'));
     }
 }

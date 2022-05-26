@@ -44,12 +44,14 @@ Route::group([
 
     Route::post('/wishlist/destroy/{id}', [ParentController::class, 'destroyWishlist'])->name('wishlist.destroy');
     Route::get('/wishlist/{id}', [ParentController::class, 'showWishlist'])->name('wishlist.show');
-    Route::get('/wishlist/{id}/add/articles', [ParentController::class, 'showArticles'])->name('widhlist.add.articles');
+    Route::get('/wishlist/{id}/add/articles', [ParentController::class, 'showArticles'])->name('wishlist.add.articles');
 
     Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.add.item');
     Route::post('/wishlist/remove/{id}', [ParentController::class, 'removeItem'])->name('wishlist.remove.item');
 
     Route::get('/wishlist/{id}/share', [ParentController::class, 'copyToClipboard'])->name('wishlist.share');
+    // export
+    Route::get('/wishlist/{id}/export', [ParentController::class, 'export'])->name('wishlist.export');
 });
 
 // Admin

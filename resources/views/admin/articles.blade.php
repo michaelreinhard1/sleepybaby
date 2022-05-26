@@ -87,5 +87,7 @@
             </div>
         </div>
     </div>
-
+    <div class="max-w-2xl  mx-auto py-5">
+        {{ $articles->links() }}
+    </div>
 </x-admin-layout>
