@@ -17,7 +17,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('parent.wishlist.show')" :active="request()->routeIs('parent.wishlist.show')">
+                    <x-nav-link :href="route('parent.wishlists.show')" :active="request()->routeIs('parent.wishlists.show')">
                         {{ __('Wishlists') }}
                     </x-nav-link>
                 </div>

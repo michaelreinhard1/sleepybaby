@@ -10,6 +10,7 @@ class HomeController extends Controller
     // show homepage
     public function show()
     {
+
         return view('user.articles');
     }
 }

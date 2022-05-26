@@ -7,9 +7,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\WebhookController;
-use App\Http\Controllers\User;
 
-Route::get('/', [InvitationController::class, 'show']);
+Route::get('/', [InvitationController::class, 'show'])->name('invitation.show');
 
 Route::post('/invitation', [InvitationController::class, 'enter'])->name('invitation.enter');
 
@@ -19,7 +18,7 @@ Route::group([
     'as' => 'user.',
     'namespace' => 'User'
 ], function () {
-    Route::get('/home', [ArticleController::class, 'show'])->name('articles');
+    Route::get('/', [ArticleController::class, 'show'])->name('articles');
     Route::get('/cart', [ArticleController::class, 'showCart'])->name('cart.show');
     Route::post('/cart-add', [ArticleController::class, 'store'])->name('cart.store');
     Route::post('/cart-remove', [ArticleController::class, 'remove'])->name('cart.remove');
@@ -28,7 +27,6 @@ Route::group([
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('/order/success', [CheckoutController::class, 'success'])->name('order.success');
     Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('webhooks.mollie');
-
 });
 
 // Parent
@@ -39,11 +37,16 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::get('/home', [ParentController::class, 'show'])->name('home');
-    Route::get('/wishlist', [ParentController::class, 'showWishlist'])->name('wishlist.show');
+    Route::get('/wishlists', [ParentController::class, 'showWishlists'])->name('wishlists.show');
     Route::get('/wishlist/create', [ParentController::class, 'createWishlist'])->name('wishlist.create');
     Route::post('/wishlist/create', [ParentController::class, 'storeWishlist'])->name('wishlist.store');
+
     Route::post('/wishlist/destroy/{id}', [ParentController::class, 'destroyWishlist'])->name('wishlist.destroy');
-    Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.edit');
+    Route::get('/wishlist/{id}', [ParentController::class, 'showWishlist'])->name('wishlist.show');
+    Route::get('/wishlist/{id}/add/articles', [ParentController::class, 'showArticles'])->name('widhlist.add.articles');
+
+    Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.add.item');
+    Route::post('/wishlist/remove/{id}', [ParentController::class, 'removeItem'])->name('wishlist.remove.item');
 
 });
 

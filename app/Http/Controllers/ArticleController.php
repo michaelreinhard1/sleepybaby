@@ -5,14 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Wishlist;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
+use Illuminate\Support\Facades\View;
 
 class ArticleController extends Controller
 {
     public function show()
     {
-        // Get all the articles from the database
-        $articles = Article::paginate(24);
+
+
+        // Get code from local storage
+        $code = session()->get('code');
+
+        $wishlist = Wishlist::where('code', $code)->get();
+
+        // Get all articles with id in wishlist->article_id
+        $articles = Article::whereIn('id', json_decode($wishlist[0]->article_id))->paginate(24);
 
         // Get all the categories from the articles
         $categories = $articles->pluck('category')->unique();
@@ -20,7 +29,9 @@ class ArticleController extends Controller
         // Only pass the category the user has selected
         $selectedCategory = request()->category;
 
-        return view('user.articles', compact('articles', 'categories'));
+
+        return view('user.articles', compact('code', 'articles'));
+
     }
 
     public function store(Request $request)

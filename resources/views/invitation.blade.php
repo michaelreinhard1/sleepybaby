@@ -62,20 +62,28 @@
                                 <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="code" :value="__('Invitation code')" />
                                 <x-input id="code" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="code" name="code" required autofocus />
                             </div>
-                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                            <x-auth-session-status class="mb-4" :status="session('status')" />
-                            <div class="mb-6">
+                            @if (session('success'))
+                            <div class="flex items-center justify-center p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                                {{ session('success') }}
+                            </div>
+                            @endif
+
+                            @if (session('error'))
+                            <div class="flex items-center justify-center p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                                {{ session('error') }}
+                            </div>
+                            @endif
+                            <div class="mb-6 mt-6">
                                 <x-button>
                                     {{ __('Enter') }}
                                 </x-button>
                             </div>
-                            {{-- Do you want to create your own wishlist? Login or register here --}}
-                                <p class="text-sm text-center text-gray-400">{{__("Do you want to create your own wishlist?")}}
-                                    <br>
-                                    <a href="{{ route('register') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>
-                                    or
-                                    <a href="{{ route('login') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Login')}}</a>
-                                </p>
+                            <p class="text-sm text-center text-gray-400">{{__("Do you want to create your own wishlist?")}}
+                                <br>
+                                <a href="{{ route('register') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a>
+                                or
+                                <a href="{{ route('login') }}" class="text-emerald-400 text-center focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Login')}}</a>
+                            </p>
                 </div>
             </div>
         </div>

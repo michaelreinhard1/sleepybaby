@@ -17,13 +17,13 @@ class ParentController extends Controller
         return view('parent.home', ['articles' => $articles]);
     }
     // showWishlist
-    public function showWishlist()
+    public function showWishlists()
     {
 
         // show wishlist of the user
         $wishlists = Wishlist::where('user_id', auth()->user()->id)->get();
 
-        return view('parent.wishlist', ['wishlists' => $wishlists]);
+        return view('parent.wishlist', compact('wishlists'));
     }
 
     // create wishlist
@@ -49,7 +49,7 @@ class ParentController extends Controller
 
         $wishlist->save();
 
-        return redirect()->route('parent.wishlist.show')->with('success', 'Wishlist created successfully.');
+        return redirect()->route('parent.wishlists.show')->with('success', 'Wishlist created successfully.');
     }
 
     public function destroyWishlist($id)
@@ -60,6 +60,62 @@ class ParentController extends Controller
         // Delete the wishlist
         $wishlist->delete();
 
-        return redirect()->route('parent.wishlist.show')->with('success', 'Wishlist deleted successfully.');
+        return redirect()->route('parent.wishlists.show')->with('success', 'Wishlist deleted successfully.');
+    }
+
+    public function showWishlist($id)
+    {
+
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($id);
+
+        // Get all articles with id in wishlist->article_id
+        $articles = Article::whereIn('id', json_decode($wishlist->article_id))->get();
+
+        return view('parent.wishlist-detail', compact('wishlist', 'articles'));
+    }
+
+    // showArticles
+    public function showArticles($wishlist_id)
+    {
+        // get wishlist
+        $wishlist = Wishlist::find($wishlist_id);
+        // Get all articles from the database and pass them to the view
+        $articles = Article::paginate(24);
+
+        return view('parent.articles', compact('articles', 'wishlist'));
+    }
+    // Add article to wishlist
+    public function addArticle(Request $request)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($request->input('wishlist_id'));
+
+        // Get all articles from the database and pass them to the view
+        $articles = Article::paginate(24);
+
+        // Add article to wishlist
+        $wishlist->article_id = json_encode(array_merge(json_decode($wishlist->article_id), [$request->input('article_id')]));
+
+        $wishlist->save();
+
+        return redirect()->route('parent.wishlists.show')->with('success', 'Article added to wishlist successfully.');
+    }
+
+    // addItem
+    public function addItem(Request $request)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($request->input('wishlist_id'));
+
+        // Get all articles from the database and pass them to the view
+        $articles = Article::paginate(24);
+
+        // Add article to wishlist
+        $wishlist->article_id = json_encode(array_merge(json_decode($wishlist->article_id), [$request->input('article_id')]));
+
+        $wishlist->save();
+
+        return redirect()->back()->with('success', 'Article added to wishlist successfully.');
     }
 }

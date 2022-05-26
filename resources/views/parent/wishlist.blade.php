@@ -9,9 +9,10 @@
 
             {{-- Your wishlists --}}
             <div class="flex flex-col  mb-10">
-                <a href="{{ route('parent.wishlist.create') }}" class="text-blue-500 hover:text-blue-700">
+                <x-link href="{{ route('parent.wishlist.create') }}">
                     {{ __('Create') }}
-                </a>
+                </x-link>
+
             </div>
 
             {{-- display all the wishlists --}}
@@ -42,15 +43,11 @@
                                         <td class="border px-4 py-2">{{ $wishlist->name }}</td>
                                         <td class="border px-4 py-2">{{ $wishlist->description }}</td>
                                         <td class="border px-4 py-2">{{ $wishlist->code }}</td>
-                                        <td class="border px-4 py-2">{{ count(json_decode($wishlist->article_id)) }}</td>
+                                        <td class="border px-4 py-2">{{ count(json_decode($wishlist->article_id, true)) }}</td>
                                         <td class="border px-4 py-2 flex justify-between">
                                             <a href="{{ route('parent.wishlist.show', $wishlist) }}"
                                                 class="text-blue-500 hover:text-blue-700">
                                                 {{ __('View') }}
-                                            </a>
-                                            <a href="{{ route('parent.wishlist.edit', $wishlist) }}"
-                                                class="text-blue-500 hover:text-blue-700 ml-4">
-                                                {{ __('Edit') }}
                                             </a>
                                             <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
                                                 method="POST" class="inline">
