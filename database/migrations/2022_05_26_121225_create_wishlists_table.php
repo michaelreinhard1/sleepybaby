@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->string('description');
-            $table->json('article_id');
+            $table->json('articles');
             $table->string('code')->unique();
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
         });
     }

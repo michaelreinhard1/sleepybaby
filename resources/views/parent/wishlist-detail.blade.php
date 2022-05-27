@@ -11,7 +11,7 @@
                 </x-link>
             </div>
 
-            @if (empty(json_decode($wishlist->article_id)))
+            @if (empty(json_decode($wishlist->articles)))
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{__('No articles found')}}
@@ -54,9 +54,9 @@
                                                 method="POST" class="inline">
                                                 @csrf
                                                 <input type="hidden" name="wishlist_id" value="{{ $wishlist->id }}">
-                                                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                                                <input type="hidden" name="article" value="{{ $article->id }}">
                                                 <button type="submit"
-                                                    class="text-blue-500 hover:text-blue-700 ml-4">
+                                                    class="text-red-500 hover:text-red-700">
                                                     {{ __('Delete') }}
                                                 </button>
                                             </form>

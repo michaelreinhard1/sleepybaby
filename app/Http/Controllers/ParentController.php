@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,8 +21,8 @@ class ParentController extends Controller
     public function showWishlists()
     {
 
-        // show wishlist of the user
-        $wishlists = Wishlist::where('user_id', auth()->user()->id)->get();
+        // show wishlist of the user only if deleted is false
+        $wishlists = Wishlist::where('user_id', auth()->user()->id)->where('deleted', false)->paginate(24);
 
         foreach ($wishlists as $wishlist) {
             $wishlist->share = $this->generateShareUrl($wishlist->id);
@@ -46,7 +47,7 @@ class ParentController extends Controller
         $wishlist->user_id = auth()->user()->id;
         $wishlist->name = $request->input('name');
         $wishlist->description = $request->input('description');
-        $wishlist->article_id = json_encode([]);
+        $wishlist->articles = json_encode([]);
 
         // generate a unique number for the code
         $wishlist->code = random_int(10000, 99999);
@@ -59,13 +60,12 @@ class ParentController extends Controller
     public function destroyWishlist($id)
     {
 
-        // Prompt the user to confirm deletion
-
-        // Find the wishlist with the id
+        // Set wishlist deleted to true
         $wishlist = Wishlist::find($id);
 
-        // Delete the wishlist
-        $wishlist->delete();
+        $wishlist->deleted = true;
+
+        $wishlist->save();
 
         return redirect()->route('parent.wishlists.show')->with('success', __('Wishlist deleted successfully'));
     }
@@ -77,8 +77,8 @@ class ParentController extends Controller
         $wishlist = Wishlist::find($id);
 
 
-        // Get all articles with id in wishlist->article_id
-        $articles = Article::whereIn('id', json_decode($wishlist->article_id))->get();
+        // Get all articles with id in wishlist->articles
+        $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
 
         return view('parent.wishlist-detail', compact('wishlist', 'articles'));
     }
@@ -93,22 +93,6 @@ class ParentController extends Controller
 
         return view('parent.articles', compact('articles', 'wishlist'));
     }
-    // Add article to wishlist
-    public function addArticle(Request $request)
-    {
-        // Find the wishlist with the id
-        $wishlist = Wishlist::find($request->input('wishlist_id'));
-
-        // Get all articles from the database and pass them to the view
-        $articles = Article::paginate(24);
-
-        // Add article to wishlist
-        $wishlist->article_id = json_encode(array_merge(json_decode($wishlist->article_id), [$request->input('article_id')]));
-
-        $wishlist->save();
-
-        return redirect()->route('parent.wishlists.show')->with('success', __('Article added to wishlist successfully'));
-    }
 
     // addItem
     public function addItem(Request $request)
@@ -116,15 +100,26 @@ class ParentController extends Controller
         // Find the wishlist with the id
         $wishlist = Wishlist::find($request->input('wishlist_id'));
 
-        // Get all articles from the database and pass them to the view
-        $articles = Article::paginate(24);
-
         // Add article to wishlist
-        $wishlist->article_id = json_encode(array_merge(json_decode($wishlist->article_id), [$request->input('article_id')]));
+        $wishlist->articles = json_encode(array_merge(json_decode($wishlist->articles), [$request->input('article')]));
 
         $wishlist->save();
 
-        return redirect()->back()->with('success', 'Article added to wishlist successfully.');
+        return redirect()->back()->with('success', __('Article added to wishlist successfully'));
+    }
+
+    // removeItem
+    public function removeItem(Request $request)
+    {
+        // Find the wishlist with the id
+        $wishlist = Wishlist::find($request->input('wishlist_id'));
+
+        // Remove article from wishlist
+        $wishlist->articles = json_encode(array_values(array_diff(json_decode($wishlist->articles), [$request->input('article')])));
+
+        $wishlist->save();
+
+        return redirect()->back()->with('success', __('Article removed from wishlist successfully'));
     }
 
     // share
@@ -170,5 +165,37 @@ class ParentController extends Controller
         $this->copyToClipboard($share_link);
 
         return redirect()->back()->with('success', __('Link copied to clipboard'));
+    }
+
+    // showOrders
+    public function showOrders()
+    {
+
+        $wishlists = Wishlist::where('user_id', auth()->user()->id)->get();
+
+        $orders = Order::whereIn('code', $wishlists->pluck('code'))->paginate(24);
+
+        $orders_by_code = [];
+        foreach ($orders as $order) {
+            $orders_by_code[$order->code][] = $order;
+        }
+
+        // Add the wishlist nanem to orders_by_code as first element
+        foreach ($orders_by_code as $code => $order) {
+            $wishlist = Wishlist::where('code', $code)->first();
+            $orders_by_code[$code][0]->wishlist_name = $wishlist->name;
+        }
+
+        return view('parent.orders', compact('orders_by_code'));
+    }
+    // showOrder
+    public function showOrder($id)
+    {
+        // Find the order with the id
+        $order = Order::find($id);
+
+        $articles = Article::whereIn('id', json_decode($order->articles))->paginate(24);
+
+        return view('parent.order-detail', compact('order', 'articles'));
     }
 }

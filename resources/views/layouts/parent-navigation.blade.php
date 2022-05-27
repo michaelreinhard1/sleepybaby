@@ -11,11 +11,16 @@
                 </div>
 
                 <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('parent.wishlists.show')" :active="request()->routeIs('parent.wishlists.show')">
                         {{ __('Wishlists') }}
                     </x-nav-link>
-                </div> --}}
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('parent.orders.show')" :active="request()->routeIs('parent.orders.show')">
+                        {{ __('Orders') }}
+                    </x-nav-link>
+                </div>
 
             </div>
 

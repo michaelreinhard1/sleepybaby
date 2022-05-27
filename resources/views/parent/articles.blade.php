@@ -19,8 +19,8 @@
             {{-- for each article --}}
             @foreach ($articles as $article)
             <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10">
-                <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-                  <img class="object-cover h-50 w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
+                <div class="w-full aspect-square flex justify-center rounded-lg xl:aspect-w-7 xl:aspect-h-8">
+                  <img class="object-cover h-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
                 </div>
                 <div>
                     <h3 class="mt-4 text-sm text-gray-700">{{$article->title}}</h3>
@@ -28,7 +28,7 @@
                     <form action="{{ route('parent.wishlist.add.item', $article) }}" method="POST">
                         @csrf
                         <input type="hidden" name="wishlist_id" value="{{ $wishlist->id }}">
-                        <input type="hidden" name="article_id" value="{{ $article->id }}">
+                        <input type="hidden" name="article" value="{{ $article->id }}">
                         <button type="submit" class="flex items-center mt-4 text-sm text-white bg-gray-800 rounded-lg px-4 py-2">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3z"></path></svg>
                             {{ __('Add to wishlist') }}

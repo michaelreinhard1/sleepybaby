@@ -20,8 +20,8 @@
         @foreach ($cartItems as $item)
         <div class="flex w-full justify-between max-h-40 my-5">
 
-            <div>
-                <img class="w-32" src="{{ asset('images/' . $item->attributes->image)}}" alt="">
+            <div class="w-full aspect-square flex  rounded-lg xl:aspect-w-7 xl:aspect-h-8">
+                <img class="object-cover h-full" src="{{ asset('images/' . $item->attributes->image)}}" alt="">
             </div>
             <div class="w-2/4">
                 <h3>{{$item->name}}</h3>

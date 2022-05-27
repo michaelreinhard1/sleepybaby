@@ -28,11 +28,15 @@ class CheckoutController extends Controller
 
         Log::alert('total: ' . $total);
 
+        $code = $request->session()->get('code');
+
         // Create a new order and save it to the database
         $order = new Order();
         $order->total = Cart::getTotal();
         $order->name = $request->name;
         $order->remarks = $request->remarks;
+        $order->articles = json_encode(Cart::getContent()->keys());
+        $order->code = $code;
         $order->status = 'open';
         $order->save();
 

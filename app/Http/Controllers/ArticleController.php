@@ -19,8 +19,8 @@ class ArticleController extends Controller
 
         $wishlist = Wishlist::where('code', $code)->get();
 
-        // Get all articles with id in wishlist->article_id
-        $articles = Article::whereIn('id', json_decode($wishlist[0]->article_id))->paginate(24);
+        // Get all articles with id in wishlist->articles
+        $articles = Article::whereIn('id', json_decode($wishlist[0]->articles))->paginate(24);
 
         // Get all the categories from the articles
         $categories = $articles->pluck('category')->unique();

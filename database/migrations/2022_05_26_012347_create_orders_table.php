@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('remarks');
             $table->string('status');
+            $table->string('code');
+            $table->json('articles');
             $table->timestamps();
         });
     }
