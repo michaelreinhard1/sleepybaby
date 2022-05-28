@@ -42,6 +42,13 @@ class ParentController extends Controller
     // storeWishlist
     public function storeWishlist(Request $request)
     {
+
+        // Validating the data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
+
         // Store the new wishlist in the database
         $wishlist = new Wishlist();
         $wishlist->user_id = auth()->user()->id;

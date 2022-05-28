@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('name');
-            $table->string('description');
+            $table->string('description', 255);
             $table->json('articles');
             $table->string('code')->unique();
             $table->boolean('deleted')->default(false);

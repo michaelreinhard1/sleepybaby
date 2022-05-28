@@ -1,7 +1,7 @@
 <x-parent-layout>
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h2 class="sr-only">{{__('Articles')}}</h2>
+          <h2 class="sr-only">{{__('My wishlists')}}</h2>
           <div class="flex justify-between">
 
               <h1 class="text-3xl font-bold mb-10">
@@ -16,6 +16,14 @@
 
                 </div>
           </div>
+
+            {{-- if success --}}
+            @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
+                {{ session('success') }}
+            </div>
+            @endif
+
 
             <div>
                 @if ($wishlists->isEmpty())
@@ -32,14 +40,17 @@
                 @else
                 <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     @foreach ($wishlists as $wishlist)
-                    <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10">
-                      <div>
-                          <h1 class="mt-4 text-2xl text-gray-700">{{$wishlist->name}}</h1>
-                            <h3 class="mt-4 text-sm text-gray-700">{{$wishlist->description}}</h3>
-                            <h3 class="mt-4 text-sm text-gray-700">
-                                {{__('Code')}}: {{$wishlist->code}}
-                            </h3>
-                            <h3 class="mt-4 text-sm text-gray-700">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h3>
+                    <div class="group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60">
+                        <img class="aspect-video w-full rounded-t-2xl object-cover object-center" src="https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+                        <div class="p-4">
+                          <small class="text-emerald-400 text-xs">{{$wishlist->code}}</small>
+                          <small class="text-emerald-400 text-xs">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</small>
+                          <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
+                          <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
+                            {{ substr($wishlist->description, 0, 100) }}
+                            {{ strlen($wishlist->description) > 100 ? '...' : '' }}
+                          </p>
+                          <div class="flex">
 
                             <a href="{{$wishlist->share}}"
                                 class="text-blue-500 hover:text-blue-700">
@@ -53,29 +64,23 @@
                             method="POST" class="inline">
                             @csrf
                             <button type="submit"
-                                class="text-green-500 hover:text-green-700 ml-4">
+                                class="text-green-500 hover:text-green-700 ">
                                 {{ __('Export to') }}
                             </button>
-                        </form>
-                        <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
-                            method="POST" class="inline">
-                            @csrf
-                            <button type="submit"
-                                class="text-red-500 hover:text-red-700 ml-4">
-                                {{ __('Delete') }}
-                            </button>
-                        </form>
-
+                            </form>
+                            <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
+                                method="POST" class="inline">
+                                @csrf
+                                <button type="submit"
+                                    class="text-red-500 hover:text-red-700 ">
+                                    {{ __('Delete') }}
+                                </button>
+                            </form>
+                            </div>
                         </div>
-                    </div>
+                      </div>
                     @endforeach
                   </div>
-                @endif
-                {{-- if success --}}
-                @if (session('success'))
-                <div class="flex p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-                    {{ session('success') }}
-                </div>
                 @endif
             </div>
 

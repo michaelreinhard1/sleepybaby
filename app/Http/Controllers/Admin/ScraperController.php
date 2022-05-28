@@ -239,7 +239,7 @@ class ScraperController extends Controller
             return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped'). $count . __('articles added to the databsase'));
+        return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
     }
 
     private function scrapeBabyPlanetArticles($request)
@@ -293,7 +293,7 @@ class ScraperController extends Controller
             return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped'). $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped') . $count . __('articles added to the databsase'));
+        return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
 
     }
 
@@ -371,7 +371,7 @@ class ScraperController extends Controller
             return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
         }
 
-        return redirect()->route('admin.scraped.articles')->with('success', __('The articles were successfully scraped'). $count . __('articles added to the databsase'));
+        return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
     }
 
     private function scrapeKidsDecoPageData($crawler) {

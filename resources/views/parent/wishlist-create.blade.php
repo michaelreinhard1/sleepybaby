@@ -5,6 +5,22 @@
           <h1 class="text-3xl font-bold mb-10">
                 {{ __('New wishlist') }}
           </h1>
+          {{-- if errors --}}
+            @if ($errors->any())
+            {{-- for each error --}}
+            @foreach ($errors->all() as $error)
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative w-fit mb-10" role="alert">
+                <strong class="font-bold">{{__('Whoops!')}}</strong>
+                <span class="block sm:inline">{{$error}}</span>
+            </div>
+            @endforeach
+            @endif
+            @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
+                {{ session('success') }}
+            </div>
+            @endif
+
             <div class="flex flex-col  mb-10">
                 <form method="POST" action="{{ route('parent.wishlist.store') }}">
                     @csrf
@@ -26,11 +42,6 @@
                     </div>
                 </form>
                 {{-- If success --}}
-                @if (session('success'))
-                <div class="flex items-center justify-center p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-                    {{ session('success') }}
-                </div>
-                @endif
             </div>
 
 

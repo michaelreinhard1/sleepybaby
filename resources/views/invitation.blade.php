@@ -63,7 +63,7 @@
                                 <x-input id="code" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="code" name="code" required autofocus />
                             </div>
                             @if (session('success'))
-                            <div class="flex items-center justify-center p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
                                 {{ session('success') }}
                             </div>
                             @endif
