@@ -29,6 +29,7 @@ Route::group([
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('/order/success', [CheckoutController::class, 'success'])->name('order.success');
     Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('webhooks.mollie');
+    Route::post('/send-email', [CheckoutController::class, 'sendEmail'])->name('send.email');
 });
 
 // Parent

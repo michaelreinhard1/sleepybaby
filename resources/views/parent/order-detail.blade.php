@@ -1,5 +1,5 @@
 <x-parent-layout>
-    <div class="bg-white">
+    <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Order from')}} {{$order->name}}</h2>
           <h1 class="text-3xl font-bold mb-3">
@@ -32,6 +32,7 @@
                 <img class="object-fit w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
               </div>
               <div>
+                <h3 class="mt-4 text-sm text-gray-700">{{__('Shop')}}: {{$article->shop}}</h3>
                   <h3 class="mt-4 text-sm text-gray-700">{{$article->title}}</h3>
                   <p class="my-5 text-lg font-medium text-gray-900">€ {{$article->price}}</p>
                     <x-link class="mb-6" href="{{ $article->url }}" target='_blank'>
@@ -45,11 +46,10 @@
         </div>
       </div>
 
-      @if ($articles->count() > 0)
+      @if ($articles->count() > 24)
       <div class="max-w-2xl  mx-auto py-5">
           {{ $articles->links() }}
       </div>
-    @endif
-
+      @endif
 
     </x-parent-layout>

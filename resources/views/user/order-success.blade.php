@@ -6,10 +6,15 @@
     </x-slot>
     <div class="bg-white h-screen">
     <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="text-3xl font-bold mb-10">{{__('Payment successfully completed')}}</h1>
+        <h1 class="text-3xl font-bold mb-10 flex items-center">
+            {{__('Payment successfully completed')}}
+            <p class="material-symbols-outlined text-emerald-500 ml-2">
+                task_alt
+            </p>
+        </h1>
 
         <a href="{{ route('user.articles') }}">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-all">
                 {{__('Go to articles')}}
             </button>
         </a>

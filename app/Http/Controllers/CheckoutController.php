@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderMail;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
@@ -9,11 +10,13 @@ use Mollie\Laravel\Facades\Mollie;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
     public function checkout( Request $request )
     {
+
 
         if(env('APP_ENV') == 'local') {
             $webhookUrl = 'https://e2a3-2a02-1811-2519-a000-2908-da2-ccf8-8ecd.eu.ngrok.io/user/webhooks/mollie';
@@ -66,10 +69,21 @@ class CheckoutController extends Controller
 
         $wishlist->articles = json_encode($wishlist->articles);
 
-        $wishlist->save();
+        // $wishlist->save();
+
+        $this->sendEmail($order);
 
         // redirect customer to Mollie user.checkout page
         return redirect($payment->getCheckoutUrl(), 303);
+
+    }
+
+    // sendEmail
+    public function sendEmail( $order )
+    {
+
+        // Send an email to user from the wishlist
+        Mail::to('xulobeats@gmail.com')->send(new OrderMail($order));
 
     }
 

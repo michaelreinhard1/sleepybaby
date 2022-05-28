@@ -6,9 +6,18 @@ use App\Models\Article;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class ParentController extends Controller
 {
+
+    // construct to pass $orders to all views
+    public function __construct()
+    {
+        $this->orders = Order::all();
+
+        View::share('orders', $this->orders);
+    }
     // showWishlist
     public function showWishlists()
     {
