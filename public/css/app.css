@@ -682,6 +682,9 @@ select {
 .m-7 {
   margin: 1.75rem;
 }
+.m-6 {
+  margin: 1.5rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -713,6 +716,10 @@ select {
 .mx-6 {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+}
+.mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -782,6 +789,9 @@ select {
 }
 .mt-5 {
   margin-top: 1.25rem;
+}
+.mt-10 {
+  margin-top: 2.5rem;
 }
 .block {
   display: block;
@@ -900,6 +910,9 @@ select {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+.w-1\/2 {
+  width: 50%;
 }
 .min-w-full {
   min-width: 100%;
@@ -1023,6 +1036,9 @@ select {
 }
 .gap-2 {
   gap: 0.5rem;
+}
+.gap-3 {
+  gap: 0.75rem;
 }
 .gap-y-10 {
   row-gap: 2.5rem;
@@ -1204,6 +1220,9 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
+.bg-transparent {
+  background-color: transparent;
+}
 .fill-current {
   fill: currentColor;
 }
@@ -1232,6 +1251,9 @@ select {
 }
 .p-2\.5 {
   padding: 0.625rem;
+}
+.p-0 {
+  padding: 0px;
 }
 .px-4 {
   padding-left: 1rem;
@@ -1780,6 +1802,11 @@ select {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
+.focus\:shadow-none:focus {
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -1797,6 +1824,11 @@ select {
 .focus\:ring-2:focus {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+.focus\:ring-0:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 .focus\:ring-emerald-100:focus {

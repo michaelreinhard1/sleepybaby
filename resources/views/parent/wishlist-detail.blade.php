@@ -25,7 +25,7 @@
           </div>
 
 
-            @if (empty($wishlist->articles) && empty($ordered_articles))
+            @if (empty(json_decode($wishlist->articles)) && $ordered_articles->isEmpty())
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{__('No articles found')}}

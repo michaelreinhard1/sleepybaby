@@ -18,7 +18,6 @@ class CheckoutController extends Controller
         if(env('APP_ENV') == 'local') {
             $webhookUrl = 'https://e2a3-2a02-1811-2519-a000-2908-da2-ccf8-8ecd.eu.ngrok.io/user/webhooks/mollie';
         } else {
-            // $webhookUrl = env('MOLLIE_WEBHOOK_URL');
             $webhookUrl = route('user.webhooks.mollie');
         }
         $user_id = session()->get('user_id');

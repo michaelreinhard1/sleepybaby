@@ -87,7 +87,9 @@
             </div>
         </div>
     </div>
-    <div class="max-w-2xl  mx-auto py-5">
-        {{ $articles->links() }}
-    </div>
+    @if ($articles->count() > 0)
+      <div class="mx-auto py-5">
+          {{ $articles->links() }}
+      </div>
+    @endif
 </x-admin-layout>

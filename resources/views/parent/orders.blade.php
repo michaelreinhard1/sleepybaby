@@ -24,7 +24,7 @@
           @foreach ($orders_by_code as $code => $orders)
 
           <h2 class="text-2xl my-10">
-              {{ __('Orders for') }}: {{ $code }}
+              {{ __('Orders for') }} {{ $code }}
           </h2>
 
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">

@@ -4,10 +4,17 @@
             {{__('Articles')}}
         </h2>
     </x-slot>
-    <div class="bg-white">
+    <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Wishlist for')}}</h2>
           <h1 class="text-3xl font-bold mb-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
+
+          @if (session('success'))
+          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
+              {{ session('success') }}
+          </div>
+          @endif
+
 
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 
@@ -32,19 +39,13 @@
                 </div>
             </div>
             @endforeach
-            {{-- If succes --}}
-            @if (session()->has('success'))
-                <div class="mt-4 text-sm text-green-600">
-                    {{ session()->get('success') }}
-                </div>
-            @endif
           </div>
+          @if ($articles->count() > 24)
+            <div class="mx-auto py-5">
+                {{ $articles->links() }}
+            </div>
+          @endif
         </div>
       </div>
-
-      <div class="max-w-2xl  mx-auto py-5">
-          {{ $articles->links() }}
-      </div>
-
 
     </x-user-layout>

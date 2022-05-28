@@ -139,6 +139,8 @@ class ParentController extends Controller
         $wishlist->save();
 
         return redirect()->back()->with('success', __('Article added to wishlist successfully'));
+        // return redirect(url()->previous().'#article'.$request->input('article'));
+
     }
 
     // removeItem

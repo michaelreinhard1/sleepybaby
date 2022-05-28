@@ -27,7 +27,7 @@
                 <h3>{{$item->name}}</h3>
                 <p>{{$item->description}}</p>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col items-center">
                 <div class="flex">
 
                     <form action="{{ route('user.cart.remove.item', $item->id) }}" method="POST">
@@ -51,13 +51,13 @@
                 <form action="{{ route('user.cart.remove') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $item->id }}">
-                    <button type="submit" class="text-red-500 rounded-lg">
+                    <button type="submit" class="text-red-500 rounded-lg mt-2">
                         {{ __('Remove') }}
                     </button>
                 </form>
             </div>
             <div>
-                <p>€ {{$item->price}}</p>
+                <p class="mx-10 w-max">€ {{$item->price}}</p>
             </div>
         </div>
         <hr>

@@ -21,7 +21,7 @@ class ScraperController extends Controller
         ];
 
         // Get al the categories from the database
-        $categories = Category::all();
+        $categories = Category::paginate(10);
 
         return view('admin.scraper', [
             'categories' => $categories,
@@ -236,7 +236,7 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
@@ -290,7 +290,7 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped'). $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped'). '. ' . $count . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
@@ -339,7 +339,6 @@ class ScraperController extends Controller
             $articles = array_merge($articles, $this->scrapeKidsDecoPageData($crawler));
         }
 
-
         if (empty($articles)) {
             return redirect()->route('admin.scraper')->with('error', __('The url is not correct, please try again'));
         }
@@ -365,10 +364,34 @@ class ScraperController extends Controller
 
         }
 
+        // Save all the articles in the database if they don't exist yet
+        foreach ($articles as $article) {
+            $art = Article::where('title', $article->title)->first();
+            if (!$art) {
+                $art = new Article();
+                $art->title = $article->title;
+                $art->image = $this->saveImage($article->image);
+                $art->url = $article->url;
+                $art->price = $article->price;
+                $art->price = $this->formatPrice($art->price);
+
+                $art->shop = 'kidsdeco';
+
+                $cat = Category::where('id', $request->id)->first();
+                $art->category_id = $cat->id;
+                $art->category = $cat->title;
+                $art->save();
+            }
+            else {
+                unset($articles[array_search($article, $articles)]);
+            }
+        }
+
+
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));

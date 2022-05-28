@@ -124,5 +124,10 @@
             </div>
         </div>
     </div>
+    @if ($categories->count() > 0)
+      <div class="max-w-2xl  mx-auto py-5">
+          {{ $categories->links() }}
+      </div>
+    @endif
 
 </x-admin-layout>
