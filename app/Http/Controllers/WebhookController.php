@@ -10,6 +10,7 @@ use Mollie\Laravel\Facades\Mollie;
 class WebhookController extends Controller
 {
     public function handle(Request $request) {
+
         if (! $request->has('id')) {
             return;
         }
@@ -26,6 +27,7 @@ class WebhookController extends Controller
             $order->status = 'paid';
             $order->save();
 
+            dd($order);
             Log::alert('Payment completed', [
                 'id' => $payment->id,
                 'amount' => $payment->amount,

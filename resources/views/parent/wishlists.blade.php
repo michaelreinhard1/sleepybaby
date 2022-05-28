@@ -17,13 +17,11 @@
                 </div>
           </div>
 
-            {{-- if success --}}
             @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
                 {{ session('success') }}
             </div>
             @endif
-
 
             <div>
                 @if ($wishlists->isEmpty())
@@ -43,39 +41,57 @@
                     <div class="group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60">
                         <img class="aspect-video w-full rounded-t-2xl object-cover object-center" src="https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
                         <div class="p-4">
-                          <small class="text-emerald-400 text-xs">{{$wishlist->code}}</small>
-                          <small class="text-emerald-400 text-xs">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</small>
+                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
+                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
                           <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
                           <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
                             {{ substr($wishlist->description, 0, 100) }}
                             {{ strlen($wishlist->description) > 100 ? '...' : '' }}
                           </p>
-                          <div class="flex">
+                          <p>
+                            {{$wishlist->share}}
+                          </p>
+                          <div class="flex flex-col gap-2">
+                              <div class="flex w-full mt-5 gap-2">
+                                  <a href="{{ route('parent.wishlist.show', $wishlist) }}"
+                                  class="text-white hover:text-gray-200 bg-blue-500 flex justify-center items-center py-2 px-6 rounded flex-grow">
+                                  <span class="material-symbols-outlined">
+                                      visibility
+                                  </span>
+                                  </a>
+                                  <form action="{{ route('parent.wishlist.export', $wishlist) }}"
+                                  method="POST" class="inline flex-grow">
+                                  @csrf
+                                  <button type="submit"
+                                      class="text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded w-full">
+                                      <span class="material-symbols-outlined hover:text-gray-200">
+                                          file_download
+                                      </span>
+                                  </button>
+                                  </form>
+                                  <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
+                                      method="POST" class="inline flex-grow">
+                                      @csrf
+                                      <button type="submit"
+                                          class="text-white hover:text-gray-200 bg-red-500 flex justify-center items-center py-2 px-6 rounded w-full">
+                                          <span class="material-symbols-outlined">
+                                              delete
+                                          </span>
+                                      </button>
+                                  </form>
 
-                            <a href="{{$wishlist->share}}"
-                                class="text-blue-500 hover:text-blue-700">
-                                {{__('Share')}}
-                            </a>
-                            <a href="{{ route('parent.wishlist.show', $wishlist) }}"
-                            class="text-blue-500 hover:text-blue-700">
-                            {{ __('View') }}
-                            </a>
-                            <form action="{{ route('parent.wishlist.export', $wishlist) }}"
-                            method="POST" class="inline">
-                            @csrf
-                            <button type="submit"
-                                class="text-green-500 hover:text-green-700 ">
-                                {{ __('Export to') }}
-                            </button>
-                            </form>
-                            <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
-                                method="POST" class="inline">
-                                @csrf
-                                <button type="submit"
-                                    class="text-red-500 hover:text-red-700 ">
-                                    {{ __('Delete') }}
-                                </button>
-                            </form>
+                              </div>
+                              <div class="w-full flex justify-center items-center ">
+                                  <a href="{{$wishlist->share}}" target="_blank"
+                                      class="text-white hover:text-gray-200 min-w-full bg-blue-500 flex justify-center items-center py-2 px-6 rounded transition-all gap-2">
+                                      <span class="material-symbols-outlined">
+                                          share
+                                      </span>
+                                      {{__('Copy link')}}
+                                  </a>
+                              </div>
+
+
                             </div>
                         </div>
                       </div>

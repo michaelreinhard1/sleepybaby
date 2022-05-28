@@ -69,18 +69,13 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('admin.scraper')" :active="request()->routeIs('admin.scraper')">
-                {{ __('Scraper') }}
+            <x-responsive-nav-link :href="route('parent.wishlists.show')" :active="request()->routeIs('parent.wishlists.show')">
+                {{ __('Wishlists') }}
             </x-responsive-nav-link>
         </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('admin.scraped.articles')" :active="request()->routeIs('admin.scraped.articles')">
-                {{ __('Scraped  articles') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('user.articles')" :active="request()->routeIs('user.articles')">
-                {{ __('View site') }}
+        <div class="pt-4 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('parent.orders.show')" :active="request()->routeIs('parent.orders.show')">
+                {{ __('Orders') }}
             </x-responsive-nav-link>
         </div>
 
@@ -95,7 +90,6 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">

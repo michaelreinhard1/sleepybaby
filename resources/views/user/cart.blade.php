@@ -13,7 +13,7 @@
         @if (Cart::isEmpty())
             <div class="text-center">
                 <h2 class="text-xl text-gray-800">{{__('Your cart is empty')}}</h2>
-                <a href="{{ route('user.articles') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{__('Go to articles')}}</a>
+                <a href="{{ route('user.articles') }}" class="text-sm text-gray-700 underline">{{__('Go to articles')}}</a>
             </div>
         @else
     <div class="flex flex-col">

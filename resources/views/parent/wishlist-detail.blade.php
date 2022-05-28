@@ -12,16 +12,20 @@
 
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
-          <h1 class="text-3xl font-bold mb-10">
+          <div class="flex justify-between">
+            <h1 class="text-3xl font-bold mb-10">
                 {{ __('Wishlist') }} - {{ $wishlist->name }}
-          </h1>
+            </h1>
+
             <div class="flex flex-col  mb-10">
                 <x-link href="{{ route('parent.wishlist.add.articles', $wishlist) }}">
                     {{ __('Add articles') }}
                 </x-link>
             </div>
+          </div>
 
-            @if (empty(json_decode($wishlist->articles)))
+
+            @if (empty($wishlist->articles) && empty($ordered_articles))
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{__('No articles found')}}
@@ -69,6 +73,25 @@
                                                     {{ __('Delete') }}
                                                 </button>
                                             </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @foreach ($ordered_articles as $article)
+                                    <tr class="bg-green-100">
+                                        <td class="border px-4 py-2">
+                                            <img class="w-full object-cover" src="{{ asset('images/' . $article->image)}}" alt="{{$article->title}}">
+                                        </td>
+                                        <td class="border px-4 py-2">{{ $article->title }}</td>
+                                        <td class="border px-4 py-2">{{__('€')}}{{ $article->price }}</td>
+                                        <td class="text-blue-400 border px-4 py-2">
+                                            <a target="_blank" href="{{ $article->url }}">
+                                                {{ $article->url }}
+                                            </a>
+                                        </td>
+                                        <td class="border px-4 py-2">{{ $article->category }}</td>
+                                        <td class="border px-4 py-2">{{ $article->shop }}</td>
+                                        <td class="border px-4 py-2 w-full">
+                                            {{ __('Ordered by') }} {{ $article->order_name }}
                                         </td>
                                     </tr>
                                     @endforeach

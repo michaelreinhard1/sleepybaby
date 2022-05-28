@@ -11,34 +11,32 @@
             </a>
         </x-slot>
 
-
-
         <!-- Session Status -->
 
-        <form method="POST" action="{{ route('login') }}" class="flex bg-white dark:bg-gray-900">
+        <form method="POST" action="{{ route('login') }}" class="flex bg-white ">
             @csrf
                 <div class="container mx-auto">
                     <div class="max-w-md mx-auto my-10">
                         <div class="text-center">
-                            <h1 class="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">{{__('Sign in')}}</h1>
-                            <p class="text-gray-500 dark:text-gray-400">{{__('Sign in to access your account')}}</p>
+                            <h1 class="my-3 text-3xl font-semibold text-gray-700 ">{{__('Sign in')}}</h1>
+                            <p class="text-gray-500 ">{{__('Sign in to access your account')}}</p>
                         </div>
                         <div class="m-7">
 
                                 <div class="mb-6">
-                                    <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="email" :value="__('Email')" />
-                                    <x-input id="email" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="email" name="email" :value="old('email')" required autofocus />
+                                    <x-label class="block mb-2 text-sm text-gray-600 " for="email" :value="__('Email')" />
+                                    <x-input id="email" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300" type="email" name="email" :value="old('email')" required autofocus />
                                 </div>
                                 <div class="mb-6">
                                     <div class="flex justify-between mb-2">
-                                        <x-label for="password" class="text-sm text-gray-600 dark:text-gray-400" :value="__('Password')" />
+                                        <x-label for="password" class="text-sm text-gray-600 " :value="__('Password')" />
                                         @if (Route::has('password.request'))
-                                        <a class="text-sm text-gray-400 focus:outline-none focus:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-300" href="{{ route('password.request') }}">
+                                        <a class="text-sm text-gray-400 focus:outline-none focus:text-emerald-500 hover:text-emerald-500 " href="{{ route('password.request') }}">
                                             {{ __('Forgot your password?') }}
                                         </a>
                                         @endif
                                     </div>
-                                    <x-input autocomplete="current-password" required type="password" name="password" id="password" placeholder="Your Password" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" />
+                                    <x-input autocomplete="current-password" required type="password" name="password" id="password" placeholder="Your Password" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 " />
                                 </div>
                                 <div class="mb-6">
                                     <label for="remember_me" class="inline-flex items-center">
@@ -54,7 +52,7 @@
                                     </x-button>
                                 </div>
                                 <p class="text-sm text-center text-gray-400">{{__("Don't have an account yet?")}}
-                                    <a href="{{ route('register') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Register')}}</a></p>
+                                    <a href="{{ route('register') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 "> {{__('Register')}}</a></p>
                         </div>
                 </div>
             </div>

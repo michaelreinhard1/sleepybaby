@@ -60,26 +60,26 @@
             <div class="container mx-auto">
                     <div class="max-w-md mx-auto my-10">
                         <div class="text-center">
-                            <h1 class="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">{{__('Register')}}</h1>
-                            <p class="text-gray-500 dark:text-gray-400">{{__('Sign in to access your account')}}</p>
+                            <h1 class="my-3 text-3xl font-semibold text-gray-700 ">{{__('Register')}}</h1>
+                            <p class="text-gray-500 ">{{__('Sign in to access your account')}}</p>
 
                         </div>
                         <div class="m-7">
 
                                 <div class="mb-6">
-                                    <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="email" :value="__('Name')" />
+                                    <x-label class="block mb-2 text-sm text-gray-600 " for="email" :value="__('Name')" />
                                     <x-input id="name" type="text" name="name" :value="old('name')" required autofocus />
                                 </div>
                                 <div class="mb-6">
-                                    <x-label  class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="email" :value="__('Email')" />
+                                    <x-label  class="block mb-2 text-sm text-gray-600 " for="email" :value="__('Email')" />
                                     <x-input id="email" type="email" name="email" :value="old('email')" required />
                                 </div>
                                 <div class="mb-6">
-                                    <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="password" :value="__('Password')" />
+                                    <x-label class="block mb-2 text-sm text-gray-600 " for="password" :value="__('Password')" />
                                     <x-input id="password" type="password" name="password" required autocomplete="new-password" />
                                 </div>
                                 <div class="mb-6">
-                                    <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="password_confirmation" :value="__('Confirm Password')" />
+                                    <x-label class="block mb-2 text-sm text-gray-600 " for="password_confirmation" :value="__('Confirm Password')" />
                                     <x-input id="password_confirmation" type="password" name="password_confirmation" required />
                                 </div>
                                 <div class="mb-6">
@@ -89,7 +89,7 @@
                                 </div>
                                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <p class="text-sm text-center text-gray-400">{{__("Already registered?")}}
-                                    <a href="{{ route('login') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 dark:focus:border-emerald-800"> {{__('Log in')}}</a></p>
+                                    <a href="{{ route('login') }}" class="text-emerald-400 focus:outline-none focus:underline focus:text-emerald-500 "> {{__('Log in')}}</a></p>
 
                         </div>
                 </div>

@@ -6,8 +6,8 @@
     </x-slot>
     <div class="bg-white">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h2 class="sr-only">{{__('Articles')}}</h2>
-          <h1 class="text-3xl font-bold mb-10">{{__('Articles')}} - {{$code}}</h1>
+          <h2 class="sr-only">{{__('Wishlist for')}}</h2>
+          <h1 class="text-3xl font-bold mb-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
 
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 

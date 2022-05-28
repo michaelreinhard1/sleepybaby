@@ -6,17 +6,9 @@ use App\Models\Article;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ParentController extends Controller
 {
-    public function show()
-    {
-        // Get all articles from the database and pass them to the view
-        $articles = Article::paginate(24);
-
-        return view('parent.wishlist.show', ['articles' => $articles]);
-    }
     // showWishlist
     public function showWishlists()
     {
@@ -87,18 +79,52 @@ class ParentController extends Controller
         // Get all articles with id in wishlist->articles
         $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
 
-        return view('parent.wishlist-detail', compact('wishlist', 'articles'));
+        // get articles from orders with same code as wishlist->code
+        $orders = Order::where('code', $wishlist->code)->get();
+
+        $ordered_articles = [];
+
+        foreach ($orders as $order) {
+            $ordered_articles = array_merge($ordered_articles, json_decode($order->articles));
+        }
+
+        $ordered_articles = Article::whereIn('id', $ordered_articles)->get();
+
+        // Add for each ordered_article a the order name
+        foreach ($ordered_articles as $ordered_article) {
+            $ordered_article->order_name = Order::where('code', $wishlist->code)->where('articles', 'like', '%' . $ordered_article->id . '%')->first()->name;
+        }
+
+        return view('parent.wishlist-detail', compact('wishlist', 'articles', 'ordered_articles'));
     }
 
     // showArticles
-    public function showArticles($wishlist_id)
+    public function showArticles(Request $request, $wishlist_id)
     {
-        // get wishlist
-        $wishlist = Wishlist::find($wishlist_id);
-        // Get all articles from the database and pass them to the view
-        $articles = Article::paginate(24);
 
-        return view('parent.articles', compact('articles', 'wishlist'));
+        // get request input category
+        $category = $request->input('category');
+
+        // if category is not set, set it to all
+        if (!$category) {
+            $category = 'all';
+        }
+
+        $wishlist = Wishlist::find($wishlist_id);
+
+        // if category is all, get all articles from wishlist
+        if ($category == 'all') {
+            $articles = Article::paginate(24);
+        } else {
+            // else get all articles from wishlist with the category
+            $articles = Article::where('category_id', $category)->paginate(24);
+        }
+
+        $category_id = $category;
+
+        $categories = Article::pluck('category', 'category_id')->unique();
+
+        return view('parent.articles', compact('articles', 'wishlist', 'categories', 'category_id'));
     }
 
     // addItem
@@ -141,10 +167,10 @@ class ParentController extends Controller
         // if env is local
         if (env('APP_ENV') == 'local') {
             // return url
-            $share_link = 'http://localhost:8000' . '/share/' . $code;
+            $share_link = 'http://localhost:8000' . '/list/' . $code;
         } else {
             // return url
-            $share_link = env('APP_URL') . '/share/' . $code;
+            $share_link = env('APP_URL') . '/list/' . $code;
         }
 
         return $share_link;
@@ -162,10 +188,10 @@ class ParentController extends Controller
         // if env is local
         if (env('APP_ENV') == 'local') {
             // return url
-            $share_link = 'http://localhost:8000' . '/share/' . $code;
+            $share_link = 'http://localhost:8000' . '/list/' . $code;
         } else {
             // return url
-            $share_link = env('APP_URL') . '/share/' . $code;
+            $share_link = env('APP_URL') . '/list/' . $code;
         }
 
         // copy to clipboard
@@ -182,15 +208,14 @@ class ParentController extends Controller
 
         $orders = Order::whereIn('code', $wishlists->pluck('code'))->paginate(24);
 
-        $orders_by_code = [];
+        // get the wishlist names
         foreach ($orders as $order) {
-            $orders_by_code[$order->code][] = $order;
+            $order->wishlist_name = Wishlist::where('code', $order->code)->first()->name;
         }
 
-        // Add the wishlist nanem to orders_by_code as first element
-        foreach ($orders_by_code as $code => $order) {
-            $wishlist = Wishlist::where('code', $code)->first();
-            $orders_by_code[$code][0]->wishlist_name = $wishlist->name;
+        $orders_by_code = [];
+        foreach ($orders as $order) {
+            $orders_by_code[$order->wishlist_name][] = $order;
         }
 
         return view('parent.orders', compact('orders_by_code'));

@@ -25,13 +25,13 @@
                 <form method="POST" action="{{ route('parent.wishlist.store') }}">
                     @csrf
                     <div class="flex flex-col mb-6">
-                        <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="name" :value="__('Name')" />
-                        <x-input id="name" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" type="name" name="name" required autofocus />
+                        <x-label class="block mb-2 text-sm text-gray-600 " for="name" :value="__('Name')" />
+                        <x-input id="name" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300" type="name" name="name" required autofocus />
 
                     </div>
                     <div class="flex flex-col mb-6">
-                        <x-label class="block mb-2 text-sm text-gray-600 dark:text-gray-400" for="description" :value="__('Description')" />
-                        <textarea id="description" type="text" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus></textarea>
+                        <x-label class="block mb-2 text-sm text-gray-600 " for="description" :value="__('Description')" />
+                        <textarea id="description" type="text" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus></textarea>
 
                     </div>
                     {{-- Button --}}

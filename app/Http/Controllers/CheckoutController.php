@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Wishlist;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Mollie\Laravel\Facades\Mollie;
 
@@ -15,12 +16,13 @@ class CheckoutController extends Controller
     {
 
         if(env('APP_ENV') == 'local') {
-            $webhookUrl = env('MOLLIE_WEBHOOK_URL');
+            $webhookUrl = 'https://e2a3-2a02-1811-2519-a000-2908-da2-ccf8-8ecd.eu.ngrok.io/user/webhooks/mollie';
         } else {
+            // $webhookUrl = env('MOLLIE_WEBHOOK_URL');
             $webhookUrl = route('user.webhooks.mollie');
         }
-
-        $cart = Cart::session(1);
+        $user_id = session()->get('user_id');
+        $cart = Cart::session($user_id);
 
         $total = $cart->getTotal();
 
@@ -55,6 +57,18 @@ class CheckoutController extends Controller
             ],
         ]);
 
+        $wishlist = Wishlist::where('code', $code)->first();
+
+        $wishlist->articles = json_decode($wishlist->articles);
+
+        $order->articles = json_decode($order->articles);
+
+        $wishlist->articles = array_values(array_diff($wishlist->articles, $order->articles));
+
+        $wishlist->articles = json_encode($wishlist->articles);
+
+        $wishlist->save();
+
         // redirect customer to Mollie user.checkout page
         return redirect($payment->getCheckoutUrl(), 303);
 
@@ -62,7 +76,8 @@ class CheckoutController extends Controller
 
     public function success()
     {
-        Cart::session(1)->clear();
+        $user_id = session()->get('user_id');
+        Cart::session($user_id)->clear();
         return view('user.order-success');
     }
 }

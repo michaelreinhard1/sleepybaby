@@ -2,9 +2,40 @@
     <div class="bg-white">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
-          <h1 class="text-3xl font-bold mb-10">
-                {{ __('Add articles to') }} {{ $wishlist->name }}
-          </h1>
+
+          <div class="flex justify-between">
+
+            <h1 class="text-3xl font-bold mb-10">
+              {{ __('Add articles to') }} {{ $wishlist->name }}
+            </h1>
+
+              <div class="flex flex-col  mb-10">
+                  <x-link href="{{ route('parent.wishlist.show', $wishlist) }}">
+                      {{ __('View wishlist') }}
+                  </x-link>
+              </div>
+          </div>
+
+          {{-- select with options --}}
+          <form method="GET" class="mb-10" action="{{ route('parent.wishlist.add.articles', $wishlist) }}" >
+            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              {{ __('Select category') }}
+            </label>
+            <select onchange="this.form.submit()" name="category" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500">
+              <option value="">
+                {{ __('All categories') }}
+              </option>
+              @foreach ($categories as $key => $category)
+              {{-- select current category --}}
+              <option value="{{ $key }}" {{ $key == $category_id ? 'selected' : '' }}>
+                {{ $category }}
+              </option>
+              @endforeach
+            </select>
+          </form>
+
+
+
 
           {{-- If success --}}
           @if (session()->has('success'))

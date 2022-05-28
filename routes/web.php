@@ -12,7 +12,7 @@ Route::get('/', [InvitationController::class, 'show'])->name('invitation.show');
 
 Route::post('/invitation', [InvitationController::class, 'enter'])->name('invitation.enter');
 
-Route::get('/share/{code}', [InvitationController::class, 'enterWithCode'])->name('invitation.share');
+Route::get('/list/{code}', [InvitationController::class, 'enterWithCode'])->name('invitation.share');
 
 // User
 Route::group([

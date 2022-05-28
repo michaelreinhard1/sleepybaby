@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\View;
 
 class ArticleController extends Controller
 {
+
     public function show()
     {
 
@@ -28,22 +29,22 @@ class ArticleController extends Controller
         // Only pass the category the user has selected
         $selectedCategory = request()->category;
 
-
-        return view('user.articles', compact('code', 'articles'));
+        return view('user.articles', compact('code', 'articles', 'wishlist'));
 
     }
 
     public function store(Request $request)
     {
         $article = Article::find($request->id);
+        $user_id = session()->get('user_id');
 
         // If the article is already in the cart update the quantity
         if (Cart::get($article->id)) {
-            Cart::session(1)->update($article->id,[
+            Cart::session($user_id)->update($article->id,[
                 'quantity' => +1,
             ]);
         } else {
-            Cart::session(1)->add(array(
+            Cart::session($user_id)->add(array(
                 'id' => $article->id,
                 'name' => $article->title,
                 'price' => $article->price,
@@ -63,7 +64,8 @@ class ArticleController extends Controller
 
     public function showCart()
     {
-        $cart = Cart::session(1);
+        $user_id = session()->get('user_id');
+        $cart = Cart::session($user_id);
 
         $cartItems = $cart->getContent();
 
@@ -73,8 +75,8 @@ class ArticleController extends Controller
     public function remove(Request $request)
     {
         // $article = Article::find($request->id);
-
-        Cart::session(1)->remove($request->id);
+        $user_id = session()->get('user_id');
+        Cart::session($user_id)->remove($request->id);
 
         return redirect()->back()->with('success', __('Article removed from cart'));
     }
@@ -83,8 +85,8 @@ class ArticleController extends Controller
     public function addItem(Request $request)
     {
         $article = Article::find($request->id);
-
-        Cart::session(1)->update($article->id,[
+        $user_id = session()->get('user_id');
+        Cart::session($user_id)->update($article->id,[
             'quantity' => +1,
         ]);
 
@@ -95,12 +97,12 @@ class ArticleController extends Controller
     public function removeItem(Request $request)
     {
         $article = Article::find($request->id);
-
+        $user_id = session()->get('user_id');
         // If quantity is 1, remove the item from the cart
-        if (Cart::session(1)->get($article->id)->quantity == 1) {
-            Cart::session(1)->remove($article->id);
+        if (Cart::session($user_id)->get($article->id)->quantity == 1) {
+            Cart::session($user_id)->remove($article->id);
         } else {
-            Cart::session(1)->update($article->id,[
+            Cart::session($user_id)->update($article->id,[
                 'quantity' => -1,
             ]);
         }
