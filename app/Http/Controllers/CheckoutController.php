@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderMail;
 use App\Models\Article;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Wishlist;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Mollie\Laravel\Facades\Mollie;
@@ -83,8 +84,11 @@ class CheckoutController extends Controller
     public function sendEmail( $order )
     {
 
-        // Send an email to user from the wishlist
-        Mail::to('xulobeats@gmail.com')->send(new OrderMail($order));
+        $user_id = Wishlist::where('code', $order->code)->first()->user_id;
+
+        $user = User::where('id', $user_id)->first();
+
+        Mail::to($user->email)->send(new OrderMail($order));
 
     }
 
