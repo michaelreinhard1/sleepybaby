@@ -2,18 +2,28 @@
 
 namespace App\View\Components;
 
+use App\Models\Order;
+use App\Models\Wishlist;
 use Illuminate\View\Component;
 
 class ParentLayout extends Component
 {
     /**
      * Create a new component instance.
-     *
+     * @param  \App\Models\Order  $order
      * @return void
      */
-    public function __construct()
+
+
+
+    public $orders;
+
+    public function __construct(Order $orders, Wishlist $wishlist)
     {
-        //
+
+        $this->wishlist = $wishlist->where('user_id', auth()->user()->id)->get('code');
+
+        $this->orders = $orders->whereIn('code', $this->wishlist)->get();
     }
 
     /**
@@ -23,6 +33,9 @@ class ParentLayout extends Component
      */
     public function render()
     {
-        return view('layouts.parent');
+
+        return view('layouts.parent', [
+            'orders' => $this->orders
+        ]);
     }
 }
