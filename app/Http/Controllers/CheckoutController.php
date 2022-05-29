@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\OrderMail;
+use App\Models\Article;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Darryldecode\Cart\Facades\CartFacade as Cart;

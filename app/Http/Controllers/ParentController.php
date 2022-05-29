@@ -11,17 +11,10 @@ use Illuminate\Support\Facades\View;
 class ParentController extends Controller
 {
 
-    // construct to pass $orders to all views
-    public function __construct()
-    {
-        $this->orders = Order::all();
 
-        View::share('orders', $this->orders);
-    }
     // showWishlist
     public function showWishlists()
     {
-
         // show wishlist of the user only if deleted is false
         $wishlists = Wishlist::where('user_id', auth()->user()->id)->where('deleted', false)->paginate(24);
 

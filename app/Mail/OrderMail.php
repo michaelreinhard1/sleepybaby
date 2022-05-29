@@ -2,7 +2,9 @@
 
 namespace App\Mail;
 
+use App\Models\Article;
 use App\Models\Order;
+use App\Models\Wishlist;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -23,11 +25,19 @@ class OrderMail extends Mailable
      * Create a new message instance.
      *
      * @param  \App\Models\Order  $order
+     *
      * @return void
      */
     public function __construct(Order $order)
     {
         $this->order = $order;
+
+        $this->order->articles = Article::whereIn('id', $order->articles)->get();
+
+        $this->order->wishlist_name = Wishlist::where('code', $order->code)->get();
+
+        $this->order->wishlist_name = $this->order->wishlist_name[0]->name;
+
     }
 
     /**
@@ -37,8 +47,10 @@ class OrderMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order')->with([
+
+        return $this->subject(__('You have a new order for') . ' ' . $this->order->wishlist_name . '!')->view('emails.order')->with([
             'order' => $this->order,
+            'message' => $this
         ]);
     }
 }
