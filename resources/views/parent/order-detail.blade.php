@@ -28,8 +28,8 @@
 
           @foreach ($articles as $article)
           <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10">
-              <div class="w-full aspect-square flex justify-center rounded-lg xl:aspect-w-7 xl:aspect-h-8">
-                <img class="object-fit w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
+              <div class="w-full aspect-square rounded-lg flex justify-center items-center">
+                <img class="object-cover  w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
               </div>
               <div>
                 <h3 class="mt-4 text-sm text-gray-700">{{__('Shop')}}: {{$article->shop}}</h3>

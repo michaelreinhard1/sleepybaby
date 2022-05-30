@@ -2,13 +2,10 @@
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('My wishlists')}}</h2>
-          <div class="flex justify-between">
-
-              <h1 class="text-3xl font-bold mb-10">
+          <div class="flex justify-between flex-col sm:flex-row">
+              <h1 class="text-3xl font-bold mb-5 mt-5 sm:mb-10 sm:mt-0">
                     {{ __('My wishlists') }}
               </h1>
-
-
                 <div class="flex flex-col  mb-10">
                     <x-link href="{{ route('parent.wishlist.create') }}">
                         {{ __('Create') }}
@@ -16,7 +13,6 @@
 
                 </div>
           </div>
-
             @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
                 {{ session('success') }}
@@ -38,9 +34,8 @@
                 @else
                 <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     @foreach ($wishlists as $wishlist)
-                    <div class="group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60">
-                        <img class="aspect-video w-full rounded-t-2xl object-cover object-center" src="https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
-                        <div class="p-4">
+                    <div class="mx-auto sm:mx-0 group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 w-max">
+                        <div class="p-4 w-full">
                           <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
                           <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
                           <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
@@ -52,46 +47,38 @@
                             {{$wishlist->share}}
                           </p>
                           <div class="flex flex-col gap-2">
-                              <div class="flex w-full mt-5 gap-2">
-                                  <a href="{{ route('parent.wishlist.show', $wishlist) }}"
-                                  class="text-white hover:text-gray-200 bg-blue-500 flex justify-center items-center py-2 px-6 rounded flex-grow">
-                                  <span class="material-symbols-outlined">
-                                      visibility
-                                  </span>
-                                  </a>
+                            <div class="flex w-full mt-5 gap-2">
+                              <a href="{{ route('parent.wishlist.show', $wishlist) }}"
+                              class="flex gap-2 text-white hover:text-gray-200 bg-blue-500  justify-center items-center py-2 px-6 rounded flex-grow">
+                              <span class="material-symbols-outlined">
+                                  visibility
+                              </span>
+                              {{__('View')}}
+                              </a>
+                            </div>
+                              <div class="flex w-full gap-2">
                                   <form action="{{ route('parent.wishlist.export', $wishlist) }}"
                                   method="GET" class="inline flex-grow">
                                   {{-- @csrf --}}
                                   <button type="submit"
-                                      class="text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded w-full">
+                                      class="gap-2 text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded w-full">
                                       <span class="material-symbols-outlined hover:text-gray-200">
                                           file_download
                                       </span>
+                                      {{__('Export')}}
                                   </button>
                                   </form>
-                                  <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
-                                      method="POST" class="inline flex-grow">
-                                      @csrf
-                                      <button type="submit"
-                                          class="text-white hover:text-gray-200 bg-red-500 flex justify-center items-center py-2 px-6 rounded w-full">
+
+                                  <div class="w-full flex justify-center items-center ">
+                                          <button
+                                          class="text-white hover:text-gray-200 w-max bg-blue-500 flex justify-center items-center py-2 px-6 rounded transition-all gap-2 btn" data-clipboard-text="{{$wishlist->share}}">
                                           <span class="material-symbols-outlined">
-                                              delete
-                                          </span>
-                                      </button>
-                                  </form>
-
+                                            content_copy
+                                            </span>
+                                            {{__('Copy link')}}
+                                          </button>
+                                  </div>
                               </div>
-                              <div class="w-full flex justify-center items-center ">
-                                  <a href="{{$wishlist->share}}" target="_blank"
-                                      class="text-white hover:text-gray-200 min-w-full bg-blue-500 flex justify-center items-center py-2 px-6 rounded transition-all gap-2">
-                                      <span class="material-symbols-outlined">
-                                          share
-                                      </span>
-                                      {{__('Copy link')}}
-                                  </a>
-                              </div>
-
-
                             </div>
                         </div>
                       </div>

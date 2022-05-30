@@ -33,16 +33,16 @@
               </select>
             </div>
             <div class="w-1/2">
-              {{-- price filter slider --}}
               <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
-                {{ __('Price') }}
+                {{ __('Price') }} 0 - {{$current_price}}
               </label>
-              <input
+              <input onchange="this.form.submit()" name="price" id="price"
               type="range"
-              class="form-range appearance-none w-full h-6 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none"
+              class="form-range appearance-none w-full h-6 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none border"
               min="0"
-              max="5"
-              step="0.5"
+              max="200"
+              value="{{ $current_price }}"
+              step="20"
               id="customRange3"
               />
             </div>
@@ -59,8 +59,8 @@
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             @foreach ($articles as $article)
             <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10" id="#article{{$article->id}}">
-                <div class="w-full aspect-square flex justify-center rounded-lg xl:aspect-w-7 xl:aspect-h-8">
-                  <img class="object-cover h-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
+                <div class="w-full aspect-square rounded-lg flex justify-center items-center">
+                  <img class="object-cover  w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
                 </div>
                 <div>
                     <h3 class="mt-4 text-sm text-gray-700">{{__('Shop')}}: {{$article->shop}}</h3>

@@ -80,6 +80,10 @@
         <div class="pt-4 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('parent.orders.show')" :active="request()->routeIs('parent.orders.show')">
                 {{ __('Orders') }}
+                @if ($orders->count() > 0)
+                ({{ $orders->count() }})
+                @endif
+
             </x-responsive-nav-link>
         </div>
 

@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 
@@ -108,27 +107,35 @@ class ParentController extends Controller
 
         // get request input category
         $category = $request->input('category');
+        $price = $request->input('price');
 
         // if category is not set, set it to all
         if (!$category) {
             $category = 'all';
         }
 
+        // if price is not set, set it to all
+        if (!$price) {
+            $price = 'all';
+        }
+
         $wishlist = Wishlist::find($wishlist_id);
 
         // if category is all, get all articles from wishlist
-        if ($category == 'all') {
+        if ($category == 'all' && $price == 'all') {
             $articles = Article::paginate(24);
         } else {
-            // else get all articles from wishlist with the category
-            $articles = Article::where('category_id', $category)->paginate(24);
+            // else get all articles from wishlist with the category and price lower or equal to the price
+            $articles = Article::where('category', $category)->where('price', '<=', $price)->paginate(24);
         }
+
+        $current_price = $price;
 
         $category_id = $category;
 
         $categories = Article::pluck('category', 'category_id')->unique();
 
-        return view('parent.articles', compact('articles', 'wishlist', 'categories', 'category_id'));
+        return view('parent.articles', compact('articles', 'wishlist', 'categories', 'category_id', 'current_price'));
     }
 
     // addItem

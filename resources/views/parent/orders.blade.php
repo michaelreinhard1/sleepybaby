@@ -2,7 +2,7 @@
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Orders')}}</h2>
-          <h1 class="text-3xl font-bold mb-10">
+          <h1 class="text-3xl font-bold mb-5 mt-5 sm:mt-0 sm:mb-10">
                 {{ __('Orders') }}
           </h1>
 
@@ -23,7 +23,7 @@
 
           @foreach ($orders_by_code as $code => $orders)
 
-          <h2 class="text-2xl my-10">
+          <h2 class="text-2xl my-2 sm:my-10">
               {{ __('Orders for') }} {{ $code }}
           </h2>
 

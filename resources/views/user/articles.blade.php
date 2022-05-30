@@ -7,20 +7,16 @@
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Wishlist for')}}</h2>
-          <h1 class="text-3xl font-bold mb-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
-
+          <h1 class="text-3xl font-bold my-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
           @if (session('success'))
           <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
               {{ session('success') }}
           </div>
           @endif
-
-
-          <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-
+          <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {{-- for each article --}}
             @foreach ($articles as $article)
-            <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10">
+            <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-2 sm:p-10">
                 <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                   <img class="object-cover h-50 w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
                 </div>

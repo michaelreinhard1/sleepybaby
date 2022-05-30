@@ -1,5 +1,5 @@
 <x-parent-layout>
-    <div class="bg-white relative">
+    <div class="bg-white relative h-screen">
 
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg absolute transform -translate-y-1/2 -translate-x-1/2 top-28 left-1/2">
             {{-- if success --}}
@@ -12,17 +12,18 @@
 
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
-          <div class="flex justify-between">
-            <h1 class="text-3xl font-bold mb-10">
+          <div class="flex justify-between mb-10">
+            <h1 class="text-3xl font-bold">
                 {{ __('Wishlist') }} - {{ $wishlist->name }}
             </h1>
 
-            <div class="flex flex-col  mb-10">
+            <div class="flex flex-col">
                 <x-link href="{{ route('parent.wishlist.add.articles', $wishlist) }}">
                     {{ __('Add articles') }}
                 </x-link>
             </div>
           </div>
+
 
 
             @if (empty(json_decode($wishlist->articles)) && $ordered_articles->isEmpty())
@@ -103,6 +104,14 @@
             </div>
             @endif
 
+            <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
+            method="POST" class=" flex-grow mt-10 flex justify-center">
+            @csrf
+            <button type="submit"
+                class="text-white hover:text-gray-200 bg-red-500 flex justify-center items-center py-2 px-6 rounded w-max text-md mb-10">
+                  {{__('Delete wishlist')}}
+            </button>
+            </form>
 
 
 

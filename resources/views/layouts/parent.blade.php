@@ -16,6 +16,9 @@
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
 
+        <script src="{{ asset('js/clipboard.min.js') }}"></script>
+
+
         <!-- Icons -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
     </head>
@@ -30,4 +33,8 @@
             </main>
         </div>
     </body>
+    <script>
+        new ClipboardJS('.btn');
+    </script>
+
 </html>

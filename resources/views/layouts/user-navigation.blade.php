@@ -96,11 +96,24 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
+        <div class=" space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-responsive-nav-link :href="route('user.articles')" :active="request()->routeIs('user.articles')">
+                {{ __('Articles') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class=" space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-responsive-nav-link :href="route('user.cart.show')" :active="request()->routeIs('user.cart.show')">
+                {{ __('Cart') }}
+            </x-responsive-nav-link>
+        </div>
+
+        @if (Auth::check() && Auth::user()->isAdmin)
+        <div class=" space-x-8 sm:-my-px sm:ml-10 sm:flex">
             <x-responsive-nav-link :href="route('admin.scraper')" :active="request()->routeIs('admin.scraper')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+        @endif
 
         <!-- Responsive Settings Options -->
         @if (Route::has('login'))
