@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+
 
 class ParentController extends Controller
 {
@@ -233,5 +235,19 @@ class ParentController extends Controller
         $articles = Article::whereIn('id', json_decode($order->articles))->paginate(24);
 
         return view('parent.order-detail', compact('order', 'articles'));
+    }
+    // downloadPDF
+    public function downloadPDF($id)
+    {
+        // Find the order with the id
+        $wishlist = Wishlist::find($id);
+
+        $share_url = $this->generateShareUrl($id);
+
+        $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
+
+        $pdf = PDF::loadView('parent.wishlist-detail-pdf', compact('wishlist', 'articles', 'share_url'));
+
+        return $pdf->download('wishlist.pdf');
     }
 }

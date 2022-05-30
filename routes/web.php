@@ -52,7 +52,7 @@ Route::group([
 
     Route::get('/wishlist/{id}/share', [ParentController::class, 'copyToClipboard'])->name('wishlist.share');
     // export
-    Route::get('/wishlist/{id}/export', [ParentController::class, 'export'])->name('wishlist.export');
+    Route::get('/wishlist/{id}/export', [ParentController::class, 'downloadPDF'])->name('wishlist.export');
 
     Route::get('/orders', [ParentController::class, 'showOrders'])->name('orders.show');
     Route::get('/order/{id}', [ParentController::class, 'showOrder'])->name('order.show');

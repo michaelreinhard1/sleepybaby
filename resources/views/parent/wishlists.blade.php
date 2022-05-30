@@ -60,8 +60,8 @@
                                   </span>
                                   </a>
                                   <form action="{{ route('parent.wishlist.export', $wishlist) }}"
-                                  method="POST" class="inline flex-grow">
-                                  @csrf
+                                  method="GET" class="inline flex-grow">
+                                  {{-- @csrf --}}
                                   <button type="submit"
                                       class="text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded w-full">
                                       <span class="material-symbols-outlined hover:text-gray-200">
