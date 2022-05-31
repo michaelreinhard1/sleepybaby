@@ -112,9 +112,6 @@
                   {{__('Delete wishlist')}}
             </button>
             </form>
-
-
-
         </div>
       </div>
 </x-parent-layout>

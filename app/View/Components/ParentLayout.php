@@ -24,6 +24,7 @@ class ParentLayout extends Component
         $this->wishlist = $wishlist->where('user_id', auth()->user()->id)->get('id');
 
         $this->orders = $orders->whereIn('wishlist_id', $this->wishlist)->get();
+
     }
 
     /**

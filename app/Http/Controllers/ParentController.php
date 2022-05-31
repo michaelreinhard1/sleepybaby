@@ -19,7 +19,7 @@ class ParentController extends Controller
         $this->middleware(function ($request, $next) {
             $this->id = auth()->user()->id;
 
-            $this->wishlists = User::find($this->id)->wishlists;
+            $this->wishlists = User::find($this->id)->wishlists->where('deleted', false);
 
             return $next($request);
         });
@@ -30,6 +30,7 @@ class ParentController extends Controller
     {
 
         $wishlists = $this->wishlists;
+
 
         foreach ($wishlists as $wishlist) {
             $wishlist->share = $this->generateShareUrl($wishlist->id);
@@ -67,7 +68,7 @@ class ParentController extends Controller
     public function destroyWishlist($id)
     {
 
-        $wishlist = Wishlist::find($id);
+        $wishlist = $this->wishlists->where('id', $id)->first();
 
         $wishlist->deleted = true;
 
@@ -78,7 +79,7 @@ class ParentController extends Controller
 
     public function showWishlist($id)
     {
-        $wishlist = Wishlist::find($id);
+        $wishlist = $this->wishlists->where('id', $id)->first();
 
         if (!$wishlist) {
             return redirect()->route('parent.wishlists.show')->with('error', __('Wishlist not found'));
@@ -127,11 +128,9 @@ class ParentController extends Controller
 
         $wishlist = Wishlist::find($wishlist_id);
 
-        // if category is all, get all articles from wishlist
         if ($category == 'all' && $price == 'all') {
             $articles = Article::paginate(24);
         } else {
-            // else get all articles from wishlist with the category and price lower or equal to the price
             $articles = Article::where('category', $category)->where('price', '<=', $price)->paginate(24);
         }
 
@@ -144,29 +143,22 @@ class ParentController extends Controller
         return view('parent.articles', compact('articles', 'wishlist', 'categories', 'category_id', 'current_price'));
     }
 
-    // addItem
     public function addItem(Request $request)
     {
-        // Find the wishlist with the id
         $wishlist = Wishlist::find($request->input('wishlist_id'));
 
-        // Add article to wishlist
         $wishlist->articles = json_encode(array_merge(json_decode($wishlist->articles), [$request->input('article')]));
 
         $wishlist->save();
 
         return redirect()->back()->with('success', __('Article added to wishlist successfully'));
-        // return redirect(url()->previous().'#article'.$request->input('article'));
 
     }
 
-    // removeItem
     public function removeItem(Request $request)
     {
-        // Find the wishlist with the id
         $wishlist = Wishlist::find($request->input('wishlist_id'));
 
-        // Remove article from wishlist
         $wishlist->articles = json_encode(array_values(array_diff(json_decode($wishlist->articles), [$request->input('article')])));
 
         $wishlist->save();
@@ -174,52 +166,18 @@ class ParentController extends Controller
         return redirect()->back()->with('success', __('Article removed from wishlist successfully'));
     }
 
-    // share
     private function generateShareUrl($id)
     {
-        // Find the wishlist with the id
         $wishlist = Wishlist::find($id);
 
-        // get code
         $code = $wishlist->code;
 
-        // if env is local
-        if (env('APP_ENV') == 'local') {
-            // return url
-            $share_link = 'http://localhost:8000' . '/list/' . $code;
-        } else {
-            // return url
-            $share_link = env('APP_URL') . '/list/' . $code;
-        }
+        $share_link = env('APP_URL') . '/list/' . $code;
 
         return $share_link;
     }
 
-    // copyToClipboard
-    public function copyToClipboard($id)
-    {
-        // Find the wishlist with the id
-        $wishlist = Wishlist::find($id);
 
-        // get code
-        $code = $wishlist->code;
-
-        // if env is local
-        if (env('APP_ENV') == 'local') {
-            // return url
-            $share_link = 'http://localhost:8000' . '/list/' . $code;
-        } else {
-            // return url
-            $share_link = env('APP_URL') . '/list/' . $code;
-        }
-
-        // copy to clipboard
-        $this->copyToClipboard($share_link);
-
-        return redirect()->back()->with('success', __('Link copied to clipboard'));
-    }
-
-    // showOrders
     public function showOrders()
     {
 
@@ -238,25 +196,28 @@ class ParentController extends Controller
 
         return view('parent.orders', compact('orders_by_code'));
     }
-    // showOrder
+
     public function showOrder($id)
     {
+
         $order = Order::find($id);
 
+        $wishlist_id = $order->wishlist_id;
 
-        // if order wishlist_id is not in wishlists, redirect to orders
-        if (!in_array($order->wishlist_id, $this->wishlists)) {
+        $user_id = Wishlist::find($wishlist_id)->user_id;
+
+        if ($user_id !== $this->id) {
             return redirect()->route('parent.orders.show')->with('error', __('Order does not belong to you'));
         }
+
 
         $articles = Article::whereIn('id', json_decode($order->articles))->paginate(24);
 
         return view('parent.order-detail', compact('order', 'articles'));
     }
-    // downloadPDF
+
     public function downloadPDF($id)
     {
-        // Find the order with the id
         $wishlist = Wishlist::find($id);
 
         $share_url = $this->generateShareUrl($id);

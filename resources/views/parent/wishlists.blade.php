@@ -20,29 +20,17 @@
             @endif
 
             <div>
-                @if ($wishlists->isEmpty())
-                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            {{ __('No wishlists yet') }}
-                        </h3>
-                        <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
-                            {{ __('You have no wishlists yet') }}
-                        </p>
-                    </div>
-                </div>
-                @else
                 <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                    @foreach ($wishlists as $wishlist)
+                    @forelse ($wishlists as $wishlist)
                     <div class="mx-auto sm:mx-0 group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 w-max">
                         <div class="p-4 w-full">
-                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
-                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
                           <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
                           <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
                             {{ substr($wishlist->description, 0, 100) }}
                             {{ strlen($wishlist->description) > 100 ? '...' : '' }}
                           </p>
+                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
+                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
                           <p>
                             {{$wishlist->share}}
                           </p>
@@ -56,9 +44,9 @@
                               {{__('View')}}
                               </a>
                             </div>
-                              <div class="flex w-full gap-2">
+                              <div class="grid grid-flow-row auto-rows-max grid-cols-2 w-full gap-2">
                                   <form action="{{ route('parent.wishlist.export', $wishlist) }}"
-                                  method="GET" class="inline flex-grow">
+                                  method="GET" class="inline grid-">
                                   {{-- @csrf --}}
                                   <button type="submit"
                                       class="gap-2 text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded w-full">
@@ -69,9 +57,9 @@
                                   </button>
                                   </form>
 
-                                  <div class="w-full flex justify-center items-center ">
+                                  <div class="w-full flex justify-center items-center">
                                           <button
-                                          class="text-white hover:text-gray-200 w-max bg-blue-500 flex justify-center items-center py-2 px-6 rounded transition-all gap-2 btn" data-clipboard-text="{{$wishlist->share}}">
+                                          class="text-white hover:text-gray-200 w-full bg-blue-500 flex justify-center items-center py-2 px-6 rounded transition-all gap-2 btn" data-clipboard-text="{{$wishlist->share}}">
                                           <span class="material-symbols-outlined">
                                             content_copy
                                             </span>
@@ -82,9 +70,19 @@
                             </div>
                         </div>
                       </div>
-                    @endforeach
+                      @empty
+                      <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full">
+                        <div class="px-4 py-5 border-b border-gray-200 sm:px-6 w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                {{ __('No wishlists yet') }}
+                            </h3>
+                            <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+                                {{ __('You have no wishlists yet') }}
+                            </p>
+                        </div>
+                    </div>
+                    @endforelse
                   </div>
-                @endif
             </div>
 
 

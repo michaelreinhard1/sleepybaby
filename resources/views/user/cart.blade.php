@@ -67,6 +67,7 @@
             <div class=" w-3/6">
                 <form class="flex flex-col gap-3" method="get" action="{{route('user.checkout')}}">
                     <x-input  type="text" name="name" required autofocus placeholder="{{__('Name')}}" />
+                    <x-input  type="text" name="email" required autofocus placeholder="{{__('Email')}}" />
                     <textarea required autofocus name="remarks" class="w-full px-3 py-2  border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300" rows="4" cols="50" placeholder={{__('Remarks')}}></textarea>
                     <button type="submit" class="text-white hover:text-gray-200 bg-emerald-500 flex justify-center items-center py-2 px-6 rounded-lg flex-grow">
                         <span class="material-symbols-outlined">

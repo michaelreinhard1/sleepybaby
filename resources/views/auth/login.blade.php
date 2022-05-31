@@ -6,7 +6,7 @@
 
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
+            <a href="{{route('invitation.show')}}">
                 <x-application-logo class="w-48 fill-current text-gray-500" />
             </a>
         </x-slot>

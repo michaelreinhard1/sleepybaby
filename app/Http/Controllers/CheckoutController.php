@@ -36,6 +36,7 @@ class CheckoutController extends Controller
         Log::alert('total: ' . $total);
 
         $code = $request->session()->get('code');
+        $email = $request->session()->get('email');
 
         // Get the wishlist id
         $wishlist = Wishlist::where('code', $code)->first();
