@@ -15,12 +15,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            // total, name, remarks, status
             $table->string('total');
             $table->string('name');
             $table->string('remarks');
             $table->string('status');
-            $table->string('code');
+            $table->foreignId('wishlist_id')->constrained();
             $table->json('articles');
             $table->timestamps();
         });

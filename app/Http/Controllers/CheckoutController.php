@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
+
     public function checkout( Request $request )
     {
 
@@ -36,14 +37,17 @@ class CheckoutController extends Controller
 
         $code = $request->session()->get('code');
 
+        // Get the wishlist id
+        $wishlist = Wishlist::where('code', $code)->first();
+
         // Create a new order and save it to the database
         $order = new Order();
         $order->total = Cart::getTotal();
         $order->name = $request->name;
         $order->remarks = $request->remarks;
         $order->articles = json_encode(Cart::getContent()->keys());
-        $order->code = $code;
         $order->status = 'open';
+        $order->wishlist_id = $wishlist->id;
         $order->save();
 
         $payment = Mollie::api()->payments->create([
@@ -61,8 +65,6 @@ class CheckoutController extends Controller
             ],
         ]);
 
-        $wishlist = Wishlist::where('code', $code)->first();
-
         $wishlist->articles = json_decode($wishlist->articles);
 
         $order->articles = json_decode($order->articles);
@@ -71,7 +73,7 @@ class CheckoutController extends Controller
 
         $wishlist->articles = json_encode($wishlist->articles);
 
-        // $wishlist->save();
+        $wishlist->save();
 
         $this->sendEmail($order);
 
@@ -84,9 +86,10 @@ class CheckoutController extends Controller
     public function sendEmail( $order )
     {
 
-        $user_id = Wishlist::where('code', $order->code)->first()->user_id;
+        $wishlist = Wishlist::find($order->wishlist_id);
 
-        $user = User::where('id', $user_id)->first();
+        // Get the user
+        $user = User::find($wishlist->user_id);
 
         Mail::to($user->email)->send(new OrderMail($order));
 

@@ -34,9 +34,7 @@ class OrderMail extends Mailable
 
         $this->order->articles = Article::whereIn('id', $order->articles)->get();
 
-        $this->order->wishlist_name = Wishlist::where('code', $order->code)->get();
-
-        $this->order->wishlist_name = $this->order->wishlist_name[0]->name;
+        $this->order->wishlist_name = Wishlist::find($order->wishlist_id)->name;
 
     }
 

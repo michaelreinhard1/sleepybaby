@@ -21,9 +21,9 @@ class ParentLayout extends Component
     public function __construct(Order $orders, Wishlist $wishlist)
     {
 
-        $this->wishlist = $wishlist->where('user_id', auth()->user()->id)->get('code');
+        $this->wishlist = $wishlist->where('user_id', auth()->user()->id)->get('id');
 
-        $this->orders = $orders->whereIn('code', $this->wishlist)->get();
+        $this->orders = $orders->whereIn('wishlist_id', $this->wishlist)->get();
     }
 
     /**

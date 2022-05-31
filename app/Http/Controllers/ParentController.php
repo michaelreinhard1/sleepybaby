@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -12,12 +13,23 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 class ParentController extends Controller
 {
 
+    // construct
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->id = auth()->user()->id;
 
-    // showWishlist
+            $this->wishlists = User::find($this->id)->wishlists;
+
+            return $next($request);
+        });
+
+    }
+
     public function showWishlists()
     {
-        // show wishlist of the user only if deleted is false
-        $wishlists = Wishlist::where('user_id', auth()->user()->id)->where('deleted', false)->paginate(24);
+
+        $wishlists = $this->wishlists;
 
         foreach ($wishlists as $wishlist) {
             $wishlist->share = $this->generateShareUrl($wishlist->id);
@@ -26,32 +38,25 @@ class ParentController extends Controller
         return view('parent.wishlists', compact('wishlists'));
     }
 
-    // create wishlist
     public function createWishlist()
     {
-        // Get all wishlists from the database and pass them to the view
-        $wishlists = Wishlist::paginate(24);
-
-        return view('parent.wishlist-create', compact('wishlists'));
+        return view('parent.wishlist-create');
     }
-    // storeWishlist
+
     public function storeWishlist(Request $request)
     {
 
-        // Validating the data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
         ]);
 
-        // Store the new wishlist in the database
         $wishlist = new Wishlist();
         $wishlist->user_id = auth()->user()->id;
         $wishlist->name = $request->input('name');
         $wishlist->description = $request->input('description');
         $wishlist->articles = json_encode([]);
 
-        // generate a unique number for the code
         $wishlist->code = random_int(10000, 99999);
 
         $wishlist->save();
@@ -62,7 +67,6 @@ class ParentController extends Controller
     public function destroyWishlist($id)
     {
 
-        // Set wishlist deleted to true
         $wishlist = Wishlist::find($id);
 
         $wishlist->deleted = true;
@@ -74,16 +78,18 @@ class ParentController extends Controller
 
     public function showWishlist($id)
     {
-
-        // Find the wishlist with the id
         $wishlist = Wishlist::find($id);
 
+        if (!$wishlist) {
+            return redirect()->route('parent.wishlists.show')->with('error', __('Wishlist not found'));
+        }
 
-        // Get all articles with id in wishlist->articles
+        if ($wishlist->user_id !== $this->id) {
+            return redirect()->route('parent.wishlists.show')->with('error', __('Wishlist does not belong to you'));
+        }
         $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
 
-        // get articles from orders with same code as wishlist->code
-        $orders = Order::where('code', $wishlist->code)->get();
+        $orders = Order::where('wishlist_id', $id)->get();
 
         $ordered_articles = [];
 
@@ -95,7 +101,7 @@ class ParentController extends Controller
 
         // Add for each ordered_article a the order name
         foreach ($ordered_articles as $ordered_article) {
-            $ordered_article->order_name = Order::where('code', $wishlist->code)->where('articles', 'like', '%' . $ordered_article->id . '%')->first()->name;
+            $ordered_article->order_name = Order::where('wishlist_id', $id)->where('articles', 'like', '%' . $ordered_article->id . '%')->first()->name;
         }
 
         return view('parent.wishlist-detail', compact('wishlist', 'articles', 'ordered_articles'));
@@ -217,13 +223,12 @@ class ParentController extends Controller
     public function showOrders()
     {
 
-        $wishlists = Wishlist::where('user_id', auth()->user()->id)->get();
+        $wishlists = $this->wishlists->pluck('id');
 
-        $orders = Order::whereIn('code', $wishlists->pluck('code'))->paginate(24);
+        $orders = Order::whereIn('wishlist_id', $wishlists)->get();
 
-        // get the wishlist names
         foreach ($orders as $order) {
-            $order->wishlist_name = Wishlist::where('code', $order->code)->first()->name;
+            $order->wishlist_name = Wishlist::where('id', $order->wishlist_id)->first()->name;
         }
 
         $orders_by_code = [];
@@ -236,8 +241,13 @@ class ParentController extends Controller
     // showOrder
     public function showOrder($id)
     {
-        // Find the order with the id
         $order = Order::find($id);
+
+
+        // if order wishlist_id is not in wishlists, redirect to orders
+        if (!in_array($order->wishlist_id, $this->wishlists)) {
+            return redirect()->route('parent.orders.show')->with('error', __('Order does not belong to you'));
+        }
 
         $articles = Article::whereIn('id', json_decode($order->articles))->paginate(24);
 
