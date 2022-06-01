@@ -26,24 +26,23 @@
                   {{ __('All categories') }}
                 </option>
                 @foreach ($categories as $key => $category)
-                <option value="{{ $key }}" {{ $key == $category_id ? 'selected' : '' }}>
+                <option value="{{ $key }}" {{ $key == request()->query('category') ? 'selected' : '' }}>
                   {{ $category }}
                 </option>
                 @endforeach
               </select>
             </div>
             <div class="w-1/2">
-              <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
-                {{ __('Price') }} 0 - {{$current_price}}
+              <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-bold">
+                {{ __('Price') }} 0 - {{request()->query('price')}}
               </label>
               <input onchange="this.form.submit()" name="price" id="price"
               type="range"
-              class="form-range appearance-none w-full h-6 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none border"
+              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer "
               min="0"
-              max="200"
-              value="{{ $current_price }}"
-              step="20"
-              id="customRange3"
+              max="1000"
+              value="{{ request()->query('price') ?? 0 }}"
+              step="10"
               />
             </div>
 

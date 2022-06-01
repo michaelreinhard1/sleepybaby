@@ -236,7 +236,7 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count . ' ' . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
@@ -290,7 +290,7 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped'). '. ' . $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped'). '. ' . $count . ' ' . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
@@ -391,7 +391,7 @@ class ScraperController extends Controller
         $count = count($articles);
 
         if (empty($articles)) {
-            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count . __('articles were added to the databsase'));
+            return redirect()->route('admin.scraped.articles')->with('warning', __('The articles were already scraped') . '. ' . $count .' ' . __('articles were added to the databsase'));
         }
 
         return redirect()->route('admin.scraped.articles')->with('success', $count . ' ' . __('articles added to the databsase'));
@@ -436,9 +436,15 @@ class ScraperController extends Controller
     }
 
     private function formatPrice($price) {
+
         $price = str_replace('€', '', $price);
-        $price = str_replace('.', '.', $price);
+        $price = str_replace('.', ',', $price);
         $price = str_replace(',', '.', $price);
+        $price = str_replace('–', '', $price);
+        $price = rtrim($price, ',');
+
+        $price = floatval($price);
+
         return $price;
     }
 

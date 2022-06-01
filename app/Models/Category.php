@@ -9,9 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function products()
+    public function articles()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Article::class);
     }
 
 }

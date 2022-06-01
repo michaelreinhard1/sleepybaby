@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('category')->nullable();
             $table->string('category_id')->nullable();
             $table->string('image');
-            $table->string('price');
+            $table->decimal('price', 8, 2);
             $table->string('shop');
             $table->timestamps();
         });

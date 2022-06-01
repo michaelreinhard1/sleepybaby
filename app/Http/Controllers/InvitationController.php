@@ -32,7 +32,6 @@ class InvitationController extends Controller
 
     public function enterWithCode($code)
     {
-        // Only redirect if the code is in wishlists
         if (Wishlist::where('code', $code)->exists()) {
             session()->put('code', $code);
             $user_id = random_int(10000, 99999);

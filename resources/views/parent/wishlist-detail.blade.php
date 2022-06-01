@@ -26,7 +26,7 @@
 
 
 
-            @if (empty(json_decode($wishlist->articles)) && $ordered_articles->isEmpty())
+            @if (empty(json_decode($wishlist->articles)) && count($wishlist->orders) == 0)
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{__('No articles found')}}
@@ -103,7 +103,6 @@
                 </div>
             </div>
             @endif
-
             <form action="{{ route('parent.wishlist.destroy', $wishlist) }}"
             method="POST" class=" flex-grow mt-10 flex justify-center">
             @csrf

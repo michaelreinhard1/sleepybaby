@@ -43,9 +43,9 @@ Route::group([
     Route::get('/wishlist/create', [ParentController::class, 'createWishlist'])->name('wishlist.create');
     Route::post('/wishlist/create', [ParentController::class, 'storeWishlist'])->name('wishlist.store');
 
-    Route::post('/wishlist/destroy/{id}', [ParentController::class, 'destroyWishlist'])->name('wishlist.destroy');
-    Route::get('/wishlist/{id}', [ParentController::class, 'showWishlist'])->name('wishlist.show');
-    Route::get('/wishlist/{id}/add/articles', [ParentController::class, 'showArticles'])->name('wishlist.add.articles');
+    Route::post('/wishlist/destroy/{wishlist}', [ParentController::class, 'destroyWishlist'])->name('wishlist.destroy');
+    Route::get('/wishlist/{wishlist}', [ParentController::class, 'showWishlist'])->name('wishlist.show');
+    Route::get('/wishlist/{wishlist}/add/articles', [ParentController::class, 'showArticles'])->name('wishlist.add.articles');
 
     Route::post('/wishlist/add/{id}', [ParentController::class, 'addItem'])->name('wishlist.add.item');
     Route::post('/wishlist/remove/{id}', [ParentController::class, 'removeItem'])->name('wishlist.remove.item');

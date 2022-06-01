@@ -76,15 +76,14 @@ class CheckoutController extends Controller
 
         $wishlist->save();
 
-        $this->sendEmail($order);
+        // $this->sendEmail($order);
 
-        // redirect customer to Mollie user.checkout page
         return redirect($payment->getCheckoutUrl(), 303);
 
     }
 
     // sendEmail
-    public function sendEmail( $order )
+    private function sendEmail( $order )
     {
 
         $wishlist = Wishlist::find($order->wishlist_id);

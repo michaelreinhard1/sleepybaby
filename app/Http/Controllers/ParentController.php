@@ -9,7 +9,6 @@ use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
-
 class ParentController extends Controller
 {
 
@@ -19,18 +18,17 @@ class ParentController extends Controller
         $this->middleware(function ($request, $next) {
             $this->id = auth()->user()->id;
 
-            $this->wishlists = User::find($this->id)->wishlists->where('deleted', false);
+            $this->wishlists = User::find($this->id)->wishlists;
 
             return $next($request);
         });
 
     }
 
-    public function showWishlists()
+    public function showWishlists(Request $request)
     {
 
-        $wishlists = $this->wishlists;
-
+        $wishlists = $request->user()->wishlists->where('deleted', false);
 
         foreach ($wishlists as $wishlist) {
             $wishlist->share = $this->generateShareUrl($wishlist->id);
@@ -52,23 +50,18 @@ class ParentController extends Controller
             'description' => 'required|string|max:255',
         ]);
 
-        $wishlist = new Wishlist();
-        $wishlist->user_id = auth()->user()->id;
-        $wishlist->name = $request->input('name');
-        $wishlist->description = $request->input('description');
-        $wishlist->articles = json_encode([]);
-
-        $wishlist->code = random_int(10000, 99999);
-
-        $wishlist->save();
+        $request->user()->wishlists()->create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'articles' => '[]',
+            'code' => $this->generateCode(),
+        ]);
 
         return redirect()->route('parent.wishlists.show')->with('success', __('Wishlist created successfully'));
     }
 
-    public function destroyWishlist($id)
+    public function destroyWishlist(Wishlist $wishlist)
     {
-
-        $wishlist = $this->wishlists->where('id', $id)->first();
 
         $wishlist->deleted = true;
 
@@ -77,62 +70,71 @@ class ParentController extends Controller
         return redirect()->route('parent.wishlists.show')->with('success', __('Wishlist deleted successfully'));
     }
 
-    public function showWishlist($id)
+    public function showWishlist(Wishlist $wishlist, Order $order)
     {
-        $wishlist = $this->wishlists->where('id', $id)->first();
 
-        if (!$wishlist) {
-            return redirect()->route('parent.wishlists.show')->with('error', __('Wishlist not found'));
-        }
+        $wishlist->share = $this->generateShareUrl($wishlist->id);
 
-        if ($wishlist->user_id !== $this->id) {
-            return redirect()->route('parent.wishlists.show')->with('error', __('Wishlist does not belong to you'));
-        }
-        $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
-
-        $orders = Order::where('wishlist_id', $id)->get();
+        $orders = $wishlist->orders;
 
         $ordered_articles = [];
 
         foreach ($orders as $order) {
+            $order->articles = json_decode($order->articles);
+            // get articles from order
+            $order->articles = Article::whereIn('id', $order->articles)->get();
             $ordered_articles = array_merge($ordered_articles, json_decode($order->articles));
         }
 
-        $ordered_articles = Article::whereIn('id', $ordered_articles)->get();
-
-        // Add for each ordered_article a the order name
         foreach ($ordered_articles as $ordered_article) {
-            $ordered_article->order_name = Order::where('wishlist_id', $id)->where('articles', 'like', '%' . $ordered_article->id . '%')->first()->name;
+            $ordered_article->order_name = $order->name;
         }
 
+        $articles = json_decode($wishlist->articles);
+
+        $articles = Article::whereIn('id', $articles)->get();
+
         return view('parent.wishlist-detail', compact('wishlist', 'articles', 'ordered_articles'));
+
     }
 
     // showArticles
-    public function showArticles(Request $request, $wishlist_id)
+    public function showArticles(Request $request, Wishlist $wishlist)
     {
 
         // get request input category
         $category = $request->input('category');
         $price = $request->input('price');
+        $price = floatval($price);
 
-        // if category is not set, set it to all
-        if (!$category) {
-            $category = 'all';
-        }
 
-        // if price is not set, set it to all
-        if (!$price) {
-            $price = 'all';
-        }
+        // if ($category && $price ) {
+        //     $articles = Article::whereBetween('price', [0, $price])->where('category_id', $category)->get();
+        // }
+        // elseif ($category) {
+        //     $articles = Article::where('category_id', $category)->get();
+        // }
+        // elseif ($price) {
+        //     $articles = Article::whereBetween('price', [0, $price])->get();
+        // }
+        // else {
+        //     $articles = Article::all();
+        // }
 
-        $wishlist = Wishlist::find($wishlist_id);
+        // also get all articles if no category or price is selected
 
-        if ($category == 'all' && $price == 'all') {
-            $articles = Article::paginate(24);
-        } else {
-            $articles = Article::where('category', $category)->where('price', '<=', $price)->paginate(24);
-        }
+
+        $articles = Article::whereHas('category', function ($query) use ($category, $price) {
+            if ($category && !$price) {
+                $query->where('category_id', $category);
+            }
+            elseif (!$category && $price) {
+                $query->whereBetween('price', [0, $price]);
+            }
+            elseif ($category && $price) {
+                $query->where('category_id', $category)->whereBetween('price', [0, $price]);
+            }
+        })->paginate(24);
 
         $current_price = $price;
 
@@ -140,7 +142,9 @@ class ParentController extends Controller
 
         $categories = Article::pluck('category', 'category_id')->unique();
 
-        return view('parent.articles', compact('articles', 'wishlist', 'categories', 'category_id', 'current_price'));
+        $articles->appends(['category' => $category_id, 'price' => $current_price]);
+
+        return view('parent.articles', compact('articles', 'wishlist', 'categories'));
     }
 
     public function addItem(Request $request)
@@ -164,6 +168,11 @@ class ParentController extends Controller
         $wishlist->save();
 
         return redirect()->back()->with('success', __('Article removed from wishlist successfully'));
+    }
+
+    private function generateCode()
+    {
+        return random_int(10000, 99999);;
     }
 
     private function generateShareUrl($id)

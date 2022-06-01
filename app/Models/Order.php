@@ -13,4 +13,9 @@ class Order extends Model
     {
         return $this->belongsTo(Wishlist::class);
     }
+
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class);
+    }
 }
