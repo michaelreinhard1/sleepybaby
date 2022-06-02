@@ -16,7 +16,7 @@ class ParentController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->id = auth()->user()->id;
+            $this->id = auth()->id();
 
             $this->wishlists = User::find($this->id)->wishlists;
 

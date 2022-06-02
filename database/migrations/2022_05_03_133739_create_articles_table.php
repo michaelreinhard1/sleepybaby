@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('url');
             $table->string('category')->nullable();
-            $table->string('category_id')->nullable();
+            $table->foreignId('category_id')->constrained();
             $table->string('image');
             $table->decimal('price', 8, 2);
             $table->string('shop');

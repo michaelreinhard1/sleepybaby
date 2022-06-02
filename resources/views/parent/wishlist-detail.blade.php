@@ -1,14 +1,7 @@
 <x-parent-layout>
     <div class="bg-white relative h-screen">
 
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg absolute transform -translate-y-1/2 -translate-x-1/2 top-28 left-1/2">
-            {{-- if success --}}
-            @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-                {{ session('success') }}
-            </div>
-            @endif
-        </div>
+        <x-succes-message></x-succes-message>
 
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>

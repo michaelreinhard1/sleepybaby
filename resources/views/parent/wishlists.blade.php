@@ -13,16 +13,12 @@
 
                 </div>
           </div>
-            @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-                {{ session('success') }}
-            </div>
-            @endif
+          <x-succes-message></x-succes-message>
 
             <div>
                 <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     @forelse ($wishlists as $wishlist)
-                    <div class="mx-auto sm:mx-0 group h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 w-max">
+                    <div class=" h-50 flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 col-span-1	w-fit">
                         <div class="p-4 w-full">
                           <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
                           <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
@@ -63,7 +59,7 @@
                                           <span class="material-symbols-outlined">
                                             content_copy
                                             </span>
-                                            {{__('Copy link')}}
+                                            {{__('Copy')}}
                                           </button>
                                   </div>
                               </div>

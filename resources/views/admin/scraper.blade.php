@@ -56,11 +56,7 @@
                         </div>
                     </form>
                     {{-- Display success box --}}
-                    @if (session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-                        {{ session('success') }}
-                    </div>
-                    @endif
+                    <x-succes-message></x-succes-message>
                             {{-- Display error box --}}
                     @if (session('error'))
                     <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">

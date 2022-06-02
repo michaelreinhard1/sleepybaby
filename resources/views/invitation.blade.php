@@ -21,11 +21,7 @@
                                 <x-label class="block mb-2 text-sm text-gray-600 " for="code" :value="__('Invitation code')" />
                                 <x-input id="code" class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-emerald-100 focus:border-emerald-300  " type="code" name="code" required autofocus />
                             </div>
-                            @if (session('success'))
-                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-                                {{ session('success') }}
-                            </div>
-                            @endif
+                            <x-succes-message></x-succes-message>
 
                             @if (session('error'))
                             <div class="flex items-center justify-center p-4 bg-red-100 border-l-4 border-red-500 text-red-700">

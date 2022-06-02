@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\View\Component;
 
@@ -20,8 +21,7 @@ class ParentLayout extends Component
 
     public function __construct(Order $orders, Wishlist $wishlist)
     {
-
-        $this->wishlist = $wishlist->where('user_id', auth()->user()->id)->get('id');
+        $this->wishlist = $wishlist->where('user_id', auth()->id())->get('id');
 
         $this->orders = $orders->whereIn('wishlist_id', $this->wishlist)->get();
 

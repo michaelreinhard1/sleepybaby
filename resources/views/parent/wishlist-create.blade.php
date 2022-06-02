@@ -15,11 +15,7 @@
             </div>
             @endforeach
             @endif
-            @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-                {{ session('success') }}
-            </div>
-            @endif
+            <x-succes-message></x-succes-message>
 
             <div class="flex flex-col  mb-10">
                 <form method="POST" action="{{ route('parent.wishlist.store') }}">

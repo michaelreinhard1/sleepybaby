@@ -18,11 +18,7 @@
                 </div>
                 @else
                 {{-- Make a succes box and warning box--}}
-                @if (session('success'))
-                <div class="flex items-center justify-center p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-                    {{ session('success') }}
-                </div>
-                @endif
+                <x-succes-message></x-succes-message>
 
                 @if (session('warning'))
                 <div class="flex items-center justify-center p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">

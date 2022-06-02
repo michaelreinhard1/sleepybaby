@@ -1,9 +1,12 @@
 <x-parent-layout>
-    <div class="bg-white">
+    <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
 
           <div class="flex justify-between">
+
+          <x-succes-message></x-succes-message>
+
 
             <h1 class="text-3xl font-bold mb-10">
               {{ __('Add articles to') }} {{ $wishlist->name }}
@@ -48,15 +51,9 @@
 
           </form>
 
-          @if (session('success'))
-          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-fit mb-10">
-              {{ session('success') }}
-          </div>
-          @endif
-
 
           <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-            @foreach ($articles as $article)
+            @forelse ($articles as $article)
             <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10" id="#article{{$article->id}}">
                 <div class="w-full aspect-square rounded-lg flex justify-center items-center">
                   <img class="object-cover  w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
@@ -80,7 +77,15 @@
                     </form>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full">
+              <div class="px-4 py-5 border-b border-gray-200 sm:px-6 w-full">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      {{ __('No articles found') }}
+                  </h3>
+              </div>
+          </div>
+        @endforelse
           </div>
           @if ($articles->count() > 0)
           <div class="mx-auto py-5 mt-6">
