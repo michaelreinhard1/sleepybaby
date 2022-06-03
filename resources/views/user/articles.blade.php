@@ -9,10 +9,10 @@
           <h2 class="sr-only">{{__('Wishlist for')}}</h2>
           <h1 class="text-3xl font-bold my-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
           <x-succes-message></x-succes-message>
-          <div class="grid grid-cols-2 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          <div class="grid-layout">
             {{-- for each article --}}
             @foreach ($articles as $article)
-            <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-2 sm:p-10">
+            <div class="grid-item">
                 <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                   <img class="object-cover h-50 w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
                 </div>

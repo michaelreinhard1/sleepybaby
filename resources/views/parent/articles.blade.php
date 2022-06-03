@@ -3,16 +3,16 @@
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
 
-          <div class="flex justify-between">
+          <div class="flex justify-between flex-col sm:flex-row">
 
           <x-succes-message></x-succes-message>
 
 
-            <h1 class="text-3xl font-bold mb-10">
+            <h1 class="text-3xl font-bold mb-5 mt-5 sm:mb-10 sm:mt-0 ">
               {{ __('Add articles to') }} {{ $wishlist->name }}
             </h1>
 
-              <div class="flex flex-col  mb-10">
+              <div class="flex flex-col mb-10">
                   <x-link href="{{ route('parent.wishlist.show', $wishlist) }}">
                       {{ __('View wishlist') }}
                   </x-link>
@@ -51,10 +51,9 @@
 
           </form>
 
-
-          <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          <div class="grid-layout">
             @forelse ($articles as $article)
-            <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10" id="#article{{$article->id}}">
+            <div class="grid-item" id="#article{{$article->id}}">
                 <div class="w-full aspect-square rounded-lg flex justify-center items-center">
                   <img class="object-cover  w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
                 </div>

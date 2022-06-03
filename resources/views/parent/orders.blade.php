@@ -27,9 +27,9 @@
               {{ __('Orders for') }} {{ $code }}
           </h2>
 
-          <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          <div class="grid-layout">
             @foreach ($orders as $order)
-            <div class="group h-50 flex flex-col justify-between shadow-md rounded-lg p-10">
+            <div class="grid-item">
               <div>
                   <h1 class="mt-4 text-2xl text-gray-700">{{$order->name}}</h1>
                     <h3 class="mt-4 text-sm text-gray-700">{{$order->remarks}}</h3>

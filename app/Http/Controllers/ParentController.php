@@ -28,10 +28,10 @@ class ParentController extends Controller
     public function showWishlists(Request $request)
     {
 
-        $wishlists = $request->user()->wishlists->where('deleted', false);
+        $wishlists = $this->wishlists->where('deleted', false);
 
         foreach ($wishlists as $wishlist) {
-            $wishlist->share = $this->generateShareUrl($wishlist->id);
+            $wishlist->share = $this->generateShareUrl($wishlist);
         }
 
         return view('parent.wishlists', compact('wishlists'));
@@ -53,7 +53,7 @@ class ParentController extends Controller
         $request->user()->wishlists()->create([
             'name' => $request->name,
             'description' => $request->description,
-            'articles' => '[]',
+            'articles' => json_encode([]),
             'code' => $this->generateCode(),
         ]);
 
@@ -73,7 +73,7 @@ class ParentController extends Controller
     public function showWishlist(Wishlist $wishlist, Order $order)
     {
 
-        $wishlist->share = $this->generateShareUrl($wishlist->id);
+        $wishlist->share = $this->generateShareUrl($wishlist);
 
         $orders = $wishlist->orders;
 
@@ -175,10 +175,8 @@ class ParentController extends Controller
         return random_int(10000, 99999);;
     }
 
-    private function generateShareUrl($id)
+    private function generateShareUrl(Wishlist $wishlist)
     {
-        $wishlist = Wishlist::find($id);
-
         $code = $wishlist->code;
 
         $share_link = env('APP_URL') . '/list/' . $code;
@@ -219,17 +217,14 @@ class ParentController extends Controller
             return redirect()->route('parent.orders.show')->with('error', __('Order does not belong to you'));
         }
 
-
         $articles = Article::whereIn('id', json_decode($order->articles))->paginate(24);
 
         return view('parent.order-detail', compact('order', 'articles'));
     }
 
-    public function downloadPDF($id)
+    public function downloadPDF(Wishlist $wishlist)
     {
-        $wishlist = Wishlist::find($id);
-
-        $share_url = $this->generateShareUrl($id);
+        $share_url = $this->generateShareUrl($wishlist);
 
         $articles = Article::whereIn('id', json_decode($wishlist->articles))->get();
 

@@ -1,13 +1,11 @@
 <x-parent-layout>
-    <div class="bg-white">
+    <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
           <h1 class="text-3xl font-bold mb-10">
                 {{ __('New wishlist') }}
           </h1>
-          {{-- if errors --}}
             @if ($errors->any())
-            {{-- for each error --}}
             @foreach ($errors->all() as $error)
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative w-fit mb-10" role="alert">
                 <strong class="font-bold">{{__('Whoops!')}}</strong>

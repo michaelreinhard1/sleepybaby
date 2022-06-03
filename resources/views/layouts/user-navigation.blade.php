@@ -33,14 +33,14 @@
             </div>
 
             @if (Route::has('login'))
-            <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+            <div class="hidden fixed top-0 right-0 px-6 py-4 sm:flex">
 
                 @auth
                 @else
-                    <a href="{{ route('invitation.show') }}" class="text-sm text-gray-700  underline">{{__('Wrong code?')}}</a>
-                    <a href="{{ route('login') }}" class="ml-4 text-sm text-gray-700  underline">{{__('Log in')}}</a>
+                    <a href="{{ route('invitation.show') }}" class=" text-emerald-500 block px-3 py-2 underline rounded-md text-base font-medium">{{__('Wrong code?')}}</a>
+                    <a href="{{ route('login') }}" class="ml-4 bg-emerald-500 text-white block px-3 py-2 rounded-md text-base font-medium">{{__('Log in')}}</a>
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700  underline">{{__('Register')}}</a>
+                        <a href="{{ route('register') }}" class="ml-4 bg-emerald-500 text-white block px-3 py-2 rounded-md text-base font-medium">{{__('Register')}}</a>
                     @endif
                 @endauth
             </div>

@@ -2,6 +2,15 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@layer components {
+  .grid-layout {
+    @apply grid grid-cols-2 sm:grid-cols-2 gap-y-10  gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8;
+  }
+  .grid-item {
+    @apply text-sm sm:text-base flex flex-col justify-between shadow-md rounded-lg p-2 sm:p-10;
+  }
+}
+
 .material-symbols-outlined {
     font-family: 'Material Icons';
     font-weight: normal;

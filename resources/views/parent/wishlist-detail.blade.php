@@ -5,12 +5,13 @@
 
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Articles')}}</h2>
-          <div class="flex justify-between mb-10">
-            <h1 class="text-3xl font-bold">
+
+          <div class="flex justify-between flex-col sm:flex-row">
+            <h1 class="text-3xl font-bold mb-5 mt-5 sm:mb-10 sm:mt-0">
                 {{ __('Wishlist') }} - {{ $wishlist->name }}
             </h1>
 
-            <div class="flex flex-col">
+            <div class="flex flex-col mb-10">
                 <x-link href="{{ route('parent.wishlist.add.articles', $wishlist) }}">
                     {{ __('Add articles') }}
                 </x-link>
