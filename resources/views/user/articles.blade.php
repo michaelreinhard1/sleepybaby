@@ -7,11 +7,11 @@
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('Wishlist for')}}</h2>
-          <h1 class="text-3xl font-bold my-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
+          <h1 class="text-3xl font-bold mb-10">{{__('Wishlist for')}} {{$wishlist[0]->name}}</h1>
           <x-succes-message></x-succes-message>
           <div class="grid-layout">
             {{-- for each article --}}
-            @foreach ($articles as $article)
+            @forelse ($articles as $article)
             <div class="grid-item">
                 <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                   <img class="object-cover h-50 w-full" src="{{ asset('images/' . $article->image)}}" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="w-full h-full object-center object-cover group-hover:opacity-75">
@@ -30,7 +30,15 @@
                     </form>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full col-span-full">
+              <div class="px-4 py-5 border-b border-gray-200 sm:px-6 w-full">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      {{ __('No articles found') }}
+                  </h3>
+              </div>
+            </div>
+            @endforelse
           </div>
           @if ($articles->count() > 24)
             <div class="mx-auto py-5">

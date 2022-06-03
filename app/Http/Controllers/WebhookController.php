@@ -11,23 +11,19 @@ class WebhookController extends Controller
 {
     public function handle(Request $request) {
 
-        if (! $request->has('id')) {
-            return;
-        }
+        $id = $request->input('id');
 
-        $payment = Mollie::api()->payments()->get($request->id);
+
+        $payment = Mollie::api()->payments()->get($id);
 
 
         if ($payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks()) {
 
             $order_id = $payment->metadata->order_id;
-
-            $order = Order::find($order_id);
-
+            $order = Order::findOrFail($order_id);
             $order->status = 'paid';
             $order->save();
 
-            dd($order);
             Log::alert('Payment completed', [
                 'id' => $payment->id,
                 'amount' => $payment->amount,

@@ -83,7 +83,7 @@
                       {{ __('No articles found') }}
                   </h3>
               </div>
-          </div>
+            </div>
         @endforelse
           </div>
           @if ($articles->count() > 0)

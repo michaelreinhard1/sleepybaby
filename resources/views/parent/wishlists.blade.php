@@ -16,7 +16,7 @@
           <x-succes-message></x-succes-message>
 
             <div>
-                <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                <div class="grid-layout">
                     @forelse ($wishlists as $wishlist)
                     <div class="flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 col-span-1	w-fit mx-auto">
                         <div class="p-4 w-full">
@@ -67,7 +67,7 @@
                         </div>
                       </div>
                       @empty
-                      <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full">
+                      <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full col-span-full">
                         <div class="px-4 py-5 border-b border-gray-200 sm:px-6 w-full">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">
                                 {{ __('No wishlists yet') }}

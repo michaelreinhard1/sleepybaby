@@ -20,9 +20,8 @@ class CheckoutController extends Controller
     public function checkout( Request $request )
     {
 
-
         if(env('APP_ENV') == 'local') {
-            $webhookUrl = 'https://e2a3-2a02-1811-2519-a000-2908-da2-ccf8-8ecd.eu.ngrok.io/user/webhooks/mollie';
+            $webhookUrl = 'https://2879-2a02-1811-2519-a000-d136-2176-dac-4994.eu.ngrok.io/user/webhooks/mollie';
         } else {
             $webhookUrl = route('user.webhooks.mollie');
         }

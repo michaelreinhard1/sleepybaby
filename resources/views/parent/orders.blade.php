@@ -6,29 +6,16 @@
                 {{ __('Orders') }}
           </h1>
 
-          {{-- if orders_by_code is empty --}}
-          @if (empty($orders_by_code))
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">
-                        {{ __('No orders yet') }}
-                    </h3>
-                    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
-                        {{ __('You have no orders yet') }}
-                    </p>
-                </div>
-            </div>
-          @endif
 
 
-          @foreach ($orders_by_code as $code => $orders)
+          @forelse ($orders_by_code as $code => $orders)
 
           <h2 class="text-2xl my-2 sm:my-10">
               {{ __('Orders for') }} {{ $code }}
           </h2>
 
           <div class="grid-layout">
-            @foreach ($orders as $order)
+            @forelse ($orders as $order)
             <div class="grid-item">
               <div>
                   <h1 class="mt-4 text-2xl text-gray-700">{{$order->name}}</h1>
@@ -39,10 +26,31 @@
                   </x-link>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                        {{ __('No orders yet for') }}
+                    </h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+                        {{ __('You have no orders yet') }}
+                    </p>
+                </div>
+            @endforelse
           </div>
 
-          @endforeach
+          @empty
+          <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+              <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      {{ __('No orders yet') }}
+                  </h3>
+                  <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+                      {{ __('You have no orders yet') }}
+                  </p>
+              </div>
+
+          @endforelse
         </div>
       </div>
 
