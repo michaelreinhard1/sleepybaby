@@ -230,6 +230,6 @@ class ParentController extends Controller
 
         $pdf = PDF::loadView('parent.wishlist-detail-pdf', compact('wishlist', 'articles', 'share_url'));
 
-        return $pdf->download('wishlist.pdf');
+        return $pdf->download(__('Wishlist'). $wishlist->name . 'pdf');
     }
 }

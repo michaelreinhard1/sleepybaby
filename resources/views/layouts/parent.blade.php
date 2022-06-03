@@ -7,6 +7,16 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <link rel="apple-touch-icon" sizes="180x180" href={{asset('icons/apple-touch-icon.png')}}>
+        <link rel="icon" type="image/png" sizes="32x32" href={{asset('icons/favicon-32x32.png')}}>
+        <link rel="icon" type="image/png" sizes="16x16" href={{asset('icons/favicon-16x16.png')}}>
+        <link rel="manifest" href={{asset('icons/site.webmanifest')}}>
+        <link rel="mask-icon" href={{asset('icons/safari-pinned-tab.svg')}} color="#5bbad5">
+        <meta name="apple-mobile-web-app-title" content="SleepyBaby">
+        <meta name="application-name" content="SleepyBaby">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
@@ -17,7 +27,6 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
 
         <script src="{{ asset('js/clipboard.min.js') }}"></script>
-
 
         <!-- Icons -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
