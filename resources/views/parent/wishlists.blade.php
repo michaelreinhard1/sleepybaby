@@ -2,34 +2,32 @@
     <div class="bg-white h-screen">
         <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <h2 class="sr-only">{{__('My wishlists')}}</h2>
-          <div class="flex justify-between flex-col sm:flex-row">
-              <h1 class="text-3xl font-bold mb-5 mt-5 sm:mb-10 sm:mt-0">
+          <div class="flex justify-between flex-row items-center my-5">
+              <h1 class="text-lg font-bold sm:text-2xl">
                     {{ __('My wishlists') }}
               </h1>
-                <div class="flex flex-col  mb-10">
-                    <x-link href="{{ route('parent.wishlist.create') }}">
-                        {{ __('Create') }}
-                    </x-link>
+                    <a class="bg-emerald-500 text-white p-2 rounded-full flex items-center" href="{{ route('parent.wishlist.create') }}">
+                      <span class="material-symbols-outlined">
+                        add
+                        </span>
+                    </a>
 
-                </div>
           </div>
           <x-succes-message></x-succes-message>
 
-            <div>
                 <div class="grid-layout">
                     @forelse ($wishlists as $wishlist)
-                    <div class="flex flex-col justify-center bg-white rounded-2xl shadow-xl shadow-slate-300/60 col-span-1	w-fit mx-auto">
-                        <div class="p-4 w-full">
-                          <h1 class="text-2xl font-medium text-slate-600 pb-2">{{$wishlist->name}}</h1>
+                    <div class="flex p-4 border-slate-200 border flex-col justify-center bg-white rounded-2xl shadow-md shadow-slate-300/60 col-span-full	w-full mx-auto sm:col-span-1">
+                          <h1 class="text-2xl font-medium text-slate-600 pb-2 	">{{$wishlist->name}}</h1>
                           <p class="text-sm tracking-tight font-light text-slate-400 leading-6">
                             {{ substr($wishlist->description, 0, 100) }}
                             {{ strlen($wishlist->description) > 100 ? '...' : '' }}
                           </p>
-                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
-                          <h2 class="text-blue-400 text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
-                          <p>
-                            {{$wishlist->share}}
-                          </p>
+                          <h2 class=" text-lg pb-2 font-bold">{{__('Code')}}: {{$wishlist->code}}</h2>
+                          <h2 class=" text-lg pb-2 font-bold">{{__('Articles')}}: {{ count(json_decode($wishlist->articles, true)) }}</h2>
+                          <a href="{{$wishlist->share}}" target="_blank" class="underline text-blue-400">
+                            {{ substr($wishlist->share, strpos($wishlist->share, '//') + 2) }}
+                          </a>
                           <div class="flex flex-col gap-2">
                             <div class="flex w-full mt-5 gap-2">
                               <a href="{{ route('parent.wishlist.show', $wishlist) }}"
@@ -49,7 +47,7 @@
                                       <span class="material-symbols-outlined hover:text-gray-200">
                                           file_download
                                       </span>
-                                      {{__('Export')}}
+                                      {{__('Download')}}
                                   </button>
                                   </form>
 
@@ -65,7 +63,6 @@
                               </div>
                             </div>
                         </div>
-                      </div>
                       @empty
                       <div class="bg-white shadow overflow-hidden sm:rounded-lg w-full col-span-full">
                         <div class="px-4 py-5 border-b border-gray-200 sm:px-6 w-full">
@@ -79,7 +76,6 @@
                     </div>
                     @endforelse
                   </div>
-            </div>
 
 
         </div>

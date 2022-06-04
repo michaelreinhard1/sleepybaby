@@ -5,22 +5,18 @@
         </h2>
     </x-slot>
     <div class="bg-white h-screen">
-    <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="text-3xl font-bold mb-10 flex items-center">
+    <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 flex flex-col items-center justify-center">
+        <h1 class="text-lg font-bold mt-5 ">
             {{__('Payment successfully completed')}}
-            <p class="material-symbols-outlined text-emerald-500 ml-2">
-                task_alt
-            </p>
         </h1>
+        <span class="material-symbols-outlined text-emerald-500 my-5">
+            task_alt
+        </span>
 
-        <a href="{{ route('user.articles') }}">
-            <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-all">
+        <a href="{{ route('user.articles') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition-all text-sm">
                 {{__('Go to articles')}}
-            </button>
         </a>
 
         </div>
     </div>
-
-
 </x-user-layout>

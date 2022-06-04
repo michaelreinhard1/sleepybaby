@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('total');
             $table->string('name');
-            $table->string('remarks');
+            $table->longText('remarks');
             $table->string('status');
             $table->foreignId('wishlist_id')->constrained();
             $table->json('articles');

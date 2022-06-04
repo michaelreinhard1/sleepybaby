@@ -50,6 +50,10 @@ class ParentController extends Controller
             'description' => 'required|string|max:255',
         ]);
 
+        if ($request->has('errors')) {
+            return redirect()->back()->withInput()->withErrors($request->errors);
+        }
+
         $request->user()->wishlists()->create([
             'name' => $request->name,
             'description' => $request->description,
@@ -230,6 +234,6 @@ class ParentController extends Controller
 
         $pdf = PDF::loadView('parent.wishlist-detail-pdf', compact('wishlist', 'articles', 'share_url'));
 
-        return $pdf->download(__('Wishlist'). $wishlist->name . 'pdf');
+        return $pdf->download(__('Wishlist'). $wishlist->name . '.pdf');
     }
 }

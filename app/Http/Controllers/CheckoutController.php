@@ -20,6 +20,17 @@ class CheckoutController extends Controller
     public function checkout( Request $request )
     {
 
+        // validate
+        $this->validate( $request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            // remarks max 4
+        ] );
+
+        if ( $request->has( 'errors' ) ) {
+            return redirect()->route( 'cart.show' )->with( 'errors', $request->errors );
+        }
+
         if(env('APP_ENV') == 'local') {
             $webhookUrl = 'https://2879-2a02-1811-2519-a000-d136-2176-dac-4994.eu.ngrok.io/user/webhooks/mollie';
         } else {
