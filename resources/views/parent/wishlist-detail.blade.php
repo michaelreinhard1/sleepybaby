@@ -50,7 +50,7 @@
                     <input type="hidden" name="wishlist_id" value="{{ $wishlist->id }}">
                     <input type="hidden" name="article" value="{{ $article->id }}">
                     <button type="submit"
-                        class="text-red-500 hover:text-red-700">
+                        class="text-red-500 hover:text-red-700 text-sm">
                         {{ __('Delete') }}
                     </button>
                     </form>
