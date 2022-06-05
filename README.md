@@ -1,8 +1,4 @@
-<div align="center">
-  <a href="https://sleepybaby.michaelreinhard.be/
-    <img src="public/icons/logo.png" alt="Logo" width="300">
-  </a>
-</div>
+![Logo](https://user-images.githubusercontent.com/91672894/172058499-8826ec35-2557-4d8f-aa20-c4ca29c7164f.png)
 
 # SleepyBaby
 
