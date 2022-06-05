@@ -2006,6 +2006,12 @@ select {
     width: 100%;
   }
 
+  .sm\:w-fit {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+
   .sm\:max-w-md {
     max-width: 28rem;
   }
