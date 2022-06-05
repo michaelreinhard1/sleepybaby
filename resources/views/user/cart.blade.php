@@ -47,7 +47,7 @@
             <form action="{{ route('user.cart.remove') }}" method="POST" class="flex flex-col justify-end sm:justify-center">
             @csrf
             <input type="hidden" name="id" value="{{ $item->id }}">
-            <button type="submit" class="text-red-500 hover:text-red-700">
+            <button type="submit" class="text-red-500 hover:text-red-700 text-sm">
                 {{ __('Remove') }}
             </button>
 
