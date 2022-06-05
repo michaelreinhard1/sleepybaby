@@ -1342,11 +1342,11 @@ select {
 .pt-6 {
   padding-top: 1.5rem;
 }
-.pr-10 {
-  padding-right: 2.5rem;
-}
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+.pr-10 {
+  padding-right: 2.5rem;
 }
 .pt-1 {
   padding-top: 0.25rem;
@@ -1998,10 +1998,6 @@ select {
     height: 5rem;
   }
 
-  .sm\:h-10 {
-    height: 2.5rem;
-  }
-
   .sm\:h-40 {
     height: 10rem;
   }
@@ -2068,14 +2064,14 @@ select {
     text-align: right;
   }
 
-  .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
   .sm\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
+  }
+
+  .sm\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   .sm\:leading-5 {

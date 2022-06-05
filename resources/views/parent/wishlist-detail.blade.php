@@ -14,9 +14,8 @@
                 <a class="bg-emerald-500 text-white p-2 rounded-full flex items-center" href="{{ route('parent.wishlist.add.articles', $wishlist) }}">
                     <span class="material-symbols-outlined">
                       add
-                      </span>
+                    </span>
                   </a>
-
           </div>
 
             @if (empty(json_decode($wishlist->articles)) && count($wishlist->orders) == 0)
@@ -45,7 +44,6 @@
                                 {{__('€')}} {{ $article->price }}
                             </h4>
                         </div>
-
                     <form action="{{ route('parent.wishlist.remove.item', $article) }}"
                     method="POST" class="flex flex-col justify-end sm:justify-center">
                     @csrf

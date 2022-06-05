@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmed;
 use App\Mail\OrderMail;
 use App\Models\Article;
 use App\Models\Order;
@@ -24,7 +25,7 @@ class CheckoutController extends Controller
         $this->validate( $request, [
             'name' => 'required',
             'email' => 'required|email',
-            // remarks max 4
+            'remarks' => 'required',
         ] );
 
         if ( $request->has( 'errors' ) ) {
@@ -46,12 +47,10 @@ class CheckoutController extends Controller
         Log::alert('total: ' . $total);
 
         $code = $request->session()->get('code');
-        $email = $request->session()->get('email');
+        $email = $request->email;
 
-        // Get the wishlist id
         $wishlist = Wishlist::where('code', $code)->first();
 
-        // Create a new order and save it to the database
         $order = new Order();
         $order->total = Cart::getTotal();
         $order->name = $request->name;
@@ -86,19 +85,26 @@ class CheckoutController extends Controller
 
         $wishlist->save();
 
-        // $this->sendEmail($order);
+        // Emails sturen werkt maar ik moet steeds mijn account deblokkeren omdat Outlook het als spam beschouwt.
+
+        // $this->sendComfirmationEmail($order, $email);
+        // $this->sendOrderEmail($order);
 
         return redirect($payment->getCheckoutUrl(), 303);
 
     }
 
-    // sendEmail
-    private function sendEmail( $order )
+    public function sendComfirmationEmail($order, $email)
+    {
+        Mail::to($email)->send(new OrderConfirmed($order));
+
+    }
+
+    private function sendOrderEmail( $order )
     {
 
         $wishlist = Wishlist::find($order->wishlist_id);
 
-        // Get the user
         $user = User::find($wishlist->user_id);
 
         Mail::to($user->email)->send(new OrderMail($order));

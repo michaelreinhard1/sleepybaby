@@ -449,16 +449,46 @@ class ScraperController extends Controller
     }
 
     // Show all the articles
-    public function showArticles() {
-        // Get all the articles from the database
-        $articles = Article::paginate(10);
+    public function showArticles(Request $request) {
+        $category = $request->input('category');
+        $price = $request->input('price');
+        $shop = $request->input('shop');
+        $price = floatval($price);
 
-        // Get all the categories from the articles
-        $categories = $articles->pluck('category')->unique();
+        $articles = Article::whereHas('category', function ($query) use ($category, $price, $shop) {
+            if ($category && !$price && !$shop) {
+                $query->where('category_id', $category);
+            }
+            elseif (!$category && $price && !$shop) {
+                $query->whereBetween('price', [0, $price]);
+            }
+            elseif ($category && $price && !$shop) {
+                $query->where('category_id', $category)->whereBetween('price', [0, $price]);
+            }
+            elseif (!$category && !$price && $shop) {
+                $query->where('shop', $shop);
+            }
+            elseif ($category && !$price && $shop) {
+                $query->where('category_id', $category)->where('shop', $shop);
+            }
+            elseif (!$category && $price && $shop) {
+                $query->whereBetween('price', [0, $price])->where('shop', $shop);
+            }
+            elseif ($category && $price && $shop) {
+                $query->where('category_id', $category)->whereBetween('price', [0, $price])->where('shop', $shop);
+            }
+        })->paginate(24);
 
-        // Only pass the category the user has selected
-        $selectedCategory = request()->category;
+        $current_price = $price;
 
-        return view('admin.articles', compact('articles', 'categories'));
+        $category_id = $category;
+
+        $categories = Article::pluck('category', 'category_id')->unique();
+
+        $shops = Article::pluck('shop')->unique();
+
+        $articles->appends(['category' => $category_id, 'price' => $current_price, 'shop' => $shop]);
+
+        return view('admin.articles', compact('articles', 'categories', 'shops'));
     }
 }

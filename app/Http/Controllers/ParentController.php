@@ -102,31 +102,12 @@ class ParentController extends Controller
 
     }
 
-    // showArticles
     public function showArticles(Request $request, Wishlist $wishlist)
     {
 
-        // get request input category
         $category = $request->input('category');
         $price = $request->input('price');
         $price = floatval($price);
-
-
-        // if ($category && $price ) {
-        //     $articles = Article::whereBetween('price', [0, $price])->where('category_id', $category)->get();
-        // }
-        // elseif ($category) {
-        //     $articles = Article::where('category_id', $category)->get();
-        // }
-        // elseif ($price) {
-        //     $articles = Article::whereBetween('price', [0, $price])->get();
-        // }
-        // else {
-        //     $articles = Article::all();
-        // }
-
-        // also get all articles if no category or price is selected
-
 
         $articles = Article::whereHas('category', function ($query) use ($category, $price) {
             if ($category && !$price) {
